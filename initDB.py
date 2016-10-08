@@ -7,9 +7,9 @@ def connect_db():
     return conn
 
 
-def init_db():
+def init_db(sql):
     db = connect_db()
-    with open('./schema.sql') as f:
+    with open(sql) as f:
         cursor = db.cursor()
         query = ''
         while(True):
@@ -22,6 +22,7 @@ def init_db():
                 cursor.execute(query)
                 print 'SUCCESS'
                 query = ''
+    db.commit()
     db.close()
 
 
@@ -61,7 +62,8 @@ def create_proc():
 
 def main():
     print "initilizing tables..."
-    init_db()
+    init_db('./schema.sql')
+    init_db('./dummy.sql')
     print "DONE"
     print "creating procedures..."
     create_proc()

@@ -44,12 +44,13 @@ BEGIN
 END
 --
 
-DROP PROCEDURE IF EXISTS `getRateOfPageByType`;
+DROP PROCEDURE IF EXISTS `getRateOfPageByUrl`;
 --
-CREATE PROCEDURE `getRateOfPageByType`(IN url VARCHAR(180))
+CREATE PROCEDURE `getRateOfPageByUrl`(IN url VARCHAR(180))
 BEGIN
-    SELECT
-    (SELECT p.page_id, u.opt, count(*) AS bad
+    SELECT a.page_id as page_id, a.opt as opt, a.bad as bad, b.good as good
+    FROM
+    (SELECT p._id as page_id, u.opt as opt, count(r.rate) AS bad
         FROM rates AS r
         JOIN pages AS p
         ON r.page_id = p._id
@@ -57,8 +58,10 @@ BEGIN
         ON r.user_id = u._id
         WHERE p.url = url
         AND r.rate = 0
-    ) as bad,
-    (SELECT p.page_id, u.opt, count(*) AS good
+        GROUP BY u.opt
+    ) as a
+    JOIN
+    (SELECT p._id as page_id, u.opt as opt, count(r.rate) AS good
         FROM rates AS r
         JOIN pages AS p
         ON r.page_id = p._id
@@ -66,6 +69,35 @@ BEGIN
         ON r.user_id = u._id
         WHERE p.url = url
         AND r.rate = 1
-    ) AS good;
+        GROUP BY u.opt
+    ) AS b
+    ON a.page_id = b.page_id AND a.opt = b.opt;
+END
+--
+
+DROP PROCEDURE IF EXISTS `getRateOfPage`;
+--
+CREATE PROCEDURE `getRateOfPage`(IN id INT)
+BEGIN
+    SELECT a.page_id as page_id, a.opt as opt, a.bad as bad, b.good as good
+    FROM
+    (SELECT r.page_id as page_id, u.opt as opt, count(r.rate) AS bad
+        FROM rates AS r
+        JOIN users as u
+        ON r.user_id = u._id
+        WHERE r.rate = 0
+        AND r.page_id = id
+        GROUP BY u.opt
+    ) as a
+    JOIN
+    (SELECT r.page_id as page_id, u.opt as opt, count(r.rate) AS good
+        FROM rates AS r
+        JOIN users as u
+        ON r.user_id = u._id
+        WHERE r.rate = 1
+        AND r.page_id = id
+        GROUP BY u.opt
+    ) AS b
+    ON a.page_id = b.page_id AND a.opt = b.opt;
 END
 --
