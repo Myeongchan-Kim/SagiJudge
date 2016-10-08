@@ -426,5 +426,5 @@ router.route('/wrong/:user_id').get(function(req, res){
     res.type('text/plain');
     res.send(JSON.stringify(rows));
   });
-
+});
 module.exports = router;
