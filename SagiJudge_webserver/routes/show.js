@@ -21,7 +21,11 @@ router.route('/').get(function (req, res){
 
 router.route('/get_id/:url').get(function(req, res){
   request(req.params.url, function(error, response, html){
-  	if (error) {throw error};
+  	if (error) {
+      console.log(error);
+      res.type('text/plain');
+      res.send("Wrong URI");
+    };
 
   	// console.log (html);
 
