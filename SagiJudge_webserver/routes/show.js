@@ -18,6 +18,8 @@ router.route('/').get(function (req, res){
 router.route('/get_url/:url').get(function(req, res){
   var query = "";
   pool.query(query, function (err, rows, fields){
+
+    // this is dummy data. // MC
     console.log(JSON.stringify(rows));
     res.type('text/plain');
     res.send("13221");
@@ -27,7 +29,8 @@ router.route('/get_url/:url').get(function(req, res){
 router.route('/get_rating/:id').get(function(req, res){
   var query = "";
   pool.query(query, function (err, rows, fields){
-    console.log(JSON.stringify(rows));
+
+    // this is dummy data. // MC
     var result = {
       expert :{
         good : 123,
