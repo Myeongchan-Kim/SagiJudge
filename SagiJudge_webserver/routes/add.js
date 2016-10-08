@@ -30,7 +30,7 @@ router.route('/comment/').post(function (req, res){
   console.log(query);
   pool.query(query, function (err, rows, fields){
     if(err) throw err;
-    res.type('text/plain');
+    res.type('text/json');
     res.send(JSON.stringify(rows));
   });
 })
@@ -46,7 +46,7 @@ router.route('/user/').post(function (req, res){
   console.log(query);
   pool.query(query, function (err, rows, fields){
     if(err) throw err;
-    res.type('text/plain');
+    res.type('text/json');
     res.send(JSON.stringify(rows));
   });
 })

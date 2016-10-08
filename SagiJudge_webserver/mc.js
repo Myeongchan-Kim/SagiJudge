@@ -14,7 +14,7 @@ var pool = mysql.createPool({
 });
 
 
-var url = 'http://lemontia.tistory.com/50';
+var url = 'http://dryoonblog.tistory.com/43';
 request(url, function(error, response, html){
 	if (error) {throw error};
 
@@ -23,12 +23,12 @@ request(url, function(error, response, html){
 	var $ = cheerio.load(html);
   //console.log(html);
 	var result = "";
-	$('div.article p').each(function(){
+	$('div p').each(function(){
 		console.log($(this).text());
 		result += $(this).text() + "\r\n";
 	});
 
-  $('div.titleWrap a').each(function(){
+  $('title').each(function(){
 		console.log($(this).text());
 	});
 	var query = "CALL getIdByUrl("+ url + ", "+ JSON.stringify(result)  +")" ;

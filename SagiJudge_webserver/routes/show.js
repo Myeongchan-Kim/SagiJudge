@@ -24,11 +24,11 @@ router.route('/get_article/:page_id').get(function(req, res){
   pool.query(query, function (err, rows, fields){
     if(err){
       console.log(err);
-      res.type('text/plain');
+      res.type('text/json');
       res.send("id_err");
     }
     //console.log(JSON.stringify(rows));
-    res.type('text/plain');
+    res.type('text/json');
     res.send(JSON.stringify(rows[0]));
   });
 });
@@ -37,7 +37,7 @@ router.route('/get_id/:url').get(function(req, res){
   request(req.params.url, function(error, response, html){
   	if (error) {
       console.log(error);
-      res.type('text/plain');
+      res.type('text/json');
       res.send("Wrong URI");
     };
 
@@ -45,7 +45,7 @@ router.route('/get_id/:url').get(function(req, res){
 
   	var $ = cheerio.load(html);
   	var contents = "";
-    $('div.article p').each(function(){
+    $('div p').each(function(){
   			//console.log($(this).text());
   		contents += $(this).text() + "\r\n";
   	});
@@ -55,8 +55,9 @@ router.route('/get_id/:url').get(function(req, res){
      .replace(/"/g, "\\\"");
 
     var title = "";
-    $('div.titleWrap a').each(function(){
-    	console.log($(this).text());
+
+    $('title').each(function(){
+      console.log($(this).text());
       title += $(this).text();
   	});
     title = title.replace(/\\/g, "\\\\")
@@ -72,7 +73,7 @@ router.route('/get_id/:url').get(function(req, res){
     console.log("Query: "+ query);
   	pool.query(query, function (err, rows, fields){
       if(err) throw err;
-  		res.type('text/plain');
+  		res.type('text/json');
       res.send(JSON.stringify(rows[0][0]));
   	});
   });
@@ -82,7 +83,7 @@ router.route('/get_id').post(function(req, res){
   request(req.body.url, function(error, response, html){
   	if (error) {
       console.log(error);
-      res.type('text/plain');
+      res.type('text/json');
       res.send("Wrong URI");
     };
 
@@ -116,7 +117,7 @@ router.route('/get_id').post(function(req, res){
     console.log("Query: "+ query);
   	pool.query(query, function (err, rows, fields){
       if(err) throw err;
-  		res.type('text/plain');
+  		res.type('text/json');
       res.send(JSON.stringify(rows[0][0]));
   	});
   });
@@ -143,7 +144,7 @@ router.route('/get_rating/:id').get(function(req, res){
         avg : Math.random(),
       },
     }
-    res.type('text/plain');
+    res.type('text/json');
     res.send(result);
   });
 });
@@ -182,13 +183,13 @@ router.route('/get_comments/user/:page_id').get(function(req, res){
   pool.query(query, function (err, rows, fields){
     if(err) {
       console.log(err);
-      res.type('text/plain');
+      res.type('text/json');
       res.send(JSON.stringify("error"));
     };
     var result = rows;
     console.log(result);
 
-    res.type('text/plain');
+    res.type('text/json');
     res.send(JSON.stringify(result));
   });
 });
@@ -227,13 +228,13 @@ router.route('/get_comments/doctor/:page_id').get(function(req, res){
     pool.query(query, function (err, rows, fields){
       if(err) {
         console.log(err);
-        res.type('text/plain');
+        res.type('text/json');
         res.send(JSON.stringify("error"));
       };
       var result = rows;
       console.log(result);
 
-      res.type('text/plain');
+      res.type('text/json');
       res.send(JSON.stringify(result));
     });
 });
@@ -296,7 +297,7 @@ router.route('/hot/:user_id').get(function(req, res){
       },
     },
   ];
-  res.type('text/plain');
+  res.type('text/json');
   res.send(JSON.stringify(result));
 });
 
@@ -358,7 +359,7 @@ router.route('/wait/:user_id').get(function(req, res){
       },
     },
   ];
-  res.type('text/plain');
+  res.type('text/json');
   res.send(JSON.stringify(result));
 });
 
@@ -420,7 +421,7 @@ router.route('/wrong/:user_id').get(function(req, res){
       },
     },
   ];
-  res.type('text/plain');
+  res.type('text/json');
   res.send(JSON.stringify(result));
 });
 
