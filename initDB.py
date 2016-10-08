@@ -1,15 +1,9 @@
 import MySQLdb as mdb
-
-mysql_info = dict(
-    host = 'localhost',
-    user = 'root',
-    db = 'lacidem',
-    charset = 'utf8'
-)
+from database_info import mysql_info
 
 
 def connect_db():
-    conn = mdb.connect(**mysql_info)
+    conn = mdb.connect(**mysql_info())
     return conn
 
 
