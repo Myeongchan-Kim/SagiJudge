@@ -4,5 +4,5 @@
 # API LIST
 ## url -> ID call
 /show/get_url/{url}  
-{id: (id)}
+res : {id: (id)}
 
