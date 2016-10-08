@@ -102,9 +102,9 @@ BEGIN
 END
 --
 
-DROP PROCEDURE IF EXISTS `getDangerPage`;
+DROP PROCEDURE IF EXISTS `getDangerousPages`;
 --
-CREATE PROCEDURE `getDangerPage`()
+CREATE PROCEDURE `getDangerousPages`()
 BEGIN
     SELECT a.page_id, (a.ratio - b.ratio) as gap
     FROM
@@ -156,9 +156,9 @@ BEGIN
 END
 --
 
-DROP PROCEDURE IF EXISTS `getDangerPage`;
+DROP PROCEDURE IF EXISTS `getDangerousPages`;
 --
-CREATE PROCEDURE `getDangerPage`()
+CREATE PROCEDURE `getDangerousPages`()
 BEGIN
     select *, norm.pid, norm.ratio - doc.ratio as wrongValue 
     from 
@@ -180,3 +180,40 @@ BEGIN
     LIMIT 4;
 END
 --
+
+DROP PROCEDURE IF EXISTS `getWatingPages`;
+--
+CREATE PROCEDURE `getWatingPages`()
+BEGIN
+    select page_id, count(user_id) as userCount
+    from rates
+    group by page_id
+    order by userCount DESC
+    limit 4;
+END
+--
+
+DROP PROCEDURE IF EXISTS `getHotPages`;
+--
+CREATE PROCEDURE `getHotPages`()
+BEGIN
+    select page_id, count(user_id) as userCount
+    from rates
+    group by page_id
+    order by userCount
+    limit 4;
+END
+--
+
+DROP PROCEDURE IF EXISTS `getNewPages`;
+--
+CREATE PROCEDURE `getNewPages`()
+BEGIN
+    SELECT p._id AS page_id, p.content
+    FROM pages as p
+    LEFT JOIN page_tag_rels as r
+    ON p._id = r.page_id
+    WHERE r.page_id IS NULL;
+END
+--
+
