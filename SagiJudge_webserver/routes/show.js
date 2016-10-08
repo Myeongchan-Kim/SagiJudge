@@ -89,9 +89,9 @@ router.route('/get_id').post(function(req, res){
 
   	// console.log (html);
 
-  	var $ = cheerio.load(html);
+    var $ = cheerio.load(html);
   	var contents = "";
-    $('div.article p').each(function(){
+    $('div p').each(function(){
   			//console.log($(this).text());
   		contents += $(this).text() + "\r\n";
   	});
@@ -101,8 +101,9 @@ router.route('/get_id').post(function(req, res){
      .replace(/"/g, "\\\"");
 
     var title = "";
-    $('div.titleWrap a').each(function(){
-    	console.log($(this).text());
+
+    $('title').each(function(){
+      console.log($(this).text());
       title += $(this).text();
   	});
     title = title.replace(/\\/g, "\\\\")
