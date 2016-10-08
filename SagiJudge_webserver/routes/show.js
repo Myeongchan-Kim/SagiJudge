@@ -78,7 +78,7 @@ router.route('/get_id/:url').get(function(req, res){
   });
 });
 
-router.route('/get_id/:url').post(function(req, res){
+router.route('/get_id').post(function(req, res){
   request(req.body.url, function(error, response, html){
   	if (error) {
       console.log(error);
