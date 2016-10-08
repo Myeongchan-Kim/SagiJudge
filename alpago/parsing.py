@@ -5,6 +5,7 @@ from konlpy.tag import Kkma
 from konlpy.utils import pprint
 from threading import Thread
 from more_itertools import unique_everseen
+from collections import defaultdict
 import jpype
 import multiprocessing
 import os
@@ -137,7 +138,7 @@ def do_sentencing_without_threading(lines):
 
 def do_parsing(start, end, sentences, result_parsing_thread):
     jpype.attachThreadToJVM()
-    morphs = [twitter.morphs(sentences[i]) for i in range(start, end)]
+    morphs = [twitter.pos(sentences[i]) for i in range(start, end)]
     result_parsing_thread.append(morphs)
     return
 
@@ -169,10 +170,15 @@ def concate_tuple(t):
 
 
 def analize_text(text):
-    lines = conver_text_to_lines(text)
+    lines = convert_text_to_lines(text)
     sentences = do_sentencing_by_threading(lines)
-    morphs = do_parsing_by_threading(sentences)
-    return morphs
+    morphs_list = do_parsing_by_threading(sentences)
+    s = set()
+    types = defaultdict()
+    for morphs in morphs_list:
+        for morph in morphs:
+            types.setdefault(morph[1], []).append(morph[0])
+    return dict(types)
 
 def main():
     db = connect_db()
