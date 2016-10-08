@@ -33,6 +33,7 @@ res :{
 ## 5 users comments.
 ```
 /show/get_comments/user/{{page_id}}
+/show/get_comments/doctor/{{page_id}}
 ```
 ```
 res : [
@@ -62,4 +63,15 @@ res : [
       rating: 1,
     },
   ];
+```
+
+## Post comment
+```
+/add/comment
+body :{
+ page_id : {{page_id}},
+ user_id : {{user_id}},
+ user_comment : {{user_comment}},
+ user_rating : {{user_rating}},
+}
 ```
