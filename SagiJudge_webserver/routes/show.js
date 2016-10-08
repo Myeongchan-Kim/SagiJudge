@@ -115,41 +115,66 @@ router.route('/get_comments/user/:page_id').get(function(req, res){
   //     rating: 1,
   //   },
   // ];
-  
-  res.type('text/plain');
-  res.send(JSON.stringify(result));
+
+  var query =
+  "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 1 LIMIT 5;";
+  pool.query(query, function (err, rows, fields){
+    if(err) {
+      console.log(err);
+      res.type('text/plain');
+      res.send(JSON.stringify("error"));
+    };
+    var result = rows;
+    console.log(result);
+
+    res.type('text/plain');
+    res.send(JSON.stringify(result));
+  });
 });
 
 router.route('/get_comments/doctor/:page_id').get(function(req, res){
-  var result = [
-    {
-      id: 'Dr.MC',
-      comment: '사긴거같네요',
-      rating: 0,
-    },
-    {
-      id: 'Dr.TW',
-      comment: '애매합니다.......',
-      rating: 1,
-    },
-    {
-      id: 'Dr.JW',
-      comment: '바보같네요',
-      rating: 0,
-    },
-    {
-      id: 'Dr.MY',
-      comment: 'FUCK!',
-      rating: 0,
-    },
-    {
-      id: 'Dr.SM',
-      comment: '매우 의심스럽습니다.',
-      rating: 0,
-    },
-  ]
-  res.type('text/plain');
-  res.send(JSON.stringify(result));
+  // var result = [
+  //   {
+  //     id: 'Dr.MC',
+  //     comment: '사긴거같네요',
+  //     rating: 0,
+  //   },
+  //   {
+  //     id: 'Dr.TW',
+  //     comment: '애매합니다.......',
+  //     rating: 1,
+  //   },
+  //   {
+  //     id: 'Dr.JW',
+  //     comment: '바보같네요',
+  //     rating: 0,
+  //   },
+  //   {
+  //     id: 'Dr.MY',
+  //     comment: 'FUCK!',
+  //     rating: 0,
+  //   },
+  //   {
+  //     id: 'Dr.SM',
+  //     comment: '매우 의심스럽습니다.',
+  //     rating: 0,
+  //   },
+  // ]
+
+    var query =
+    "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 2 LIMIT 5;";
+    pool.query(query, function (err, rows, fields){
+      if(err) {
+        console.log(err);
+        res.type('text/plain');
+        res.send(JSON.stringify("error"));
+      };
+      var result = rows;
+      console.log(result);
+
+      res.type('text/plain');
+      res.send(JSON.stringify(result));
+    });
 });
 
 router.route('/hot/:user_id').get(function(req, res){
