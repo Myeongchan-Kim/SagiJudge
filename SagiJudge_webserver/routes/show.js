@@ -51,8 +51,10 @@ router.route('/get_id/:url').get(function(req, res){
      .replace(/"/g, "\\\"");
 
     //console.log(req.params.url);
-    console.log(encodeURIComponent(req.params.url) );
-    var query = "CALL getIdByUrl( '"+ encodeURIComponent(req.params.url) + "', '" + title + "', '"+ contents  +"' )" ;
+    var URLobj = url.parse(req.params.url);
+    var url_str = URLobj.host + URLobj.path;
+    console.log(encodeURIComponent(url_str) );
+    var query = "CALL getIdByUrl( '"+ encodeURIComponent(url_str) + "', '" + title + "', '"+ contents  +"' )" ;
     console.log("Query: "+ query);
   	pool.query(query, function (err, rows, fields){
       if(err) throw err;
