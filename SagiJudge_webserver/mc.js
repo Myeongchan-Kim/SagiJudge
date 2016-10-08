@@ -13,24 +13,33 @@ var pool = mysql.createPool({
   password : '1234'
 });
 
-//
-// var url = 'http://damoadamoa.tistory.com/123';
-// request(url, function(error, response, html){
-// 	if (error) {throw error};
-//
-// 	// console.log (html);
-//
-// 	var $ = cheerio.load(html);
-// 	var result = "";
-// 	$('#entry div.article p').each(function(){
-// 		//console.log($(this).text());
-// 		result += $(this).text() + "\r\n";
-// 	});
-// 	var query = "CALL getIdByUrl("+ url + ", "+ JSON.stringify(result)  +")" ;
-// 	console.log("Query: "+ query);
-// 	pool.query(query, function (err, rows, fields){
-// 		console.log(fields);
-// 	});
-// });
+
+var url = 'http://damoadamoa.tistory.com/121';
+request(url, function(error, response, html){
+	if (error) {throw error};
+
+	// console.log (html);
+
+	var $ = cheerio.load(html);
+	var result = "";
+	$('#entry div.article p').each(function(){
+		//console.log($(this).text());
+		result += $(this).text() + "\r\n";
+	});
+
+  var title = "";
+  $('div.titleWrap h2 .subs').each(function(){
+		console.log($(this).text());
+    title += $(this).text();
+	});
+	var query = "CALL getIdByUrl("+ url + ", "+ title + ", "+ result  +")" ;
+	//console.log("Query: "+ query);
+	//pool.query(query, function (err, rows, fields){
+		//console.log(fields);
+	//});
+});
 
 console.log(encodeURIComponent("http://lemontia.tistory.com/50"));
+
+
+console.log(Math.random());

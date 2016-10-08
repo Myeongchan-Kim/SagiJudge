@@ -30,15 +30,29 @@ router.route('/get_id/:url').get(function(req, res){
   	// console.log (html);
 
   	var $ = cheerio.load(html);
-  	var result = "";
+  	var contents = "";
   	$('#entry div.article p').each(function(){
   		//console.log($(this).text());
-  		result += $(this).text() + "\r\n";
+  		contents += $(this).text() + "\r\n";
   	});
+    contents = contents.replace(/\\/g, "\\\\")
+     .replace(/\$/g, "\\$")
+     .replace(/'/g, "\\'")
+     .replace(/"/g, "\\\"");
 
-    console.log(req.params.url);
+    var title = "";
+    $('div.titleWrap h2 .subs').each(function(){
+  		console.log($(this).text());
+      title += $(this).text();
+  	});
+    title = title.replace(/\\/g, "\\\\")
+     .replace(/\$/g, "\\$")
+     .replace(/'/g, "\\'")
+     .replace(/"/g, "\\\"");
+
+    //console.log(req.params.url);
     console.log(encodeURIComponent(req.params.url) );
-    var query = "CALL getIdByUrl( '"+ encodeURIComponent(req.params.url) + "', "+ JSON.stringify(result)  +")" ;
+    var query = "CALL getIdByUrl( '"+ encodeURIComponent(req.params.url) + "', '" + title + "', '"+ contents  +"' )" ;
     console.log("Query: "+ query);
   	pool.query(query, function (err, rows, fields){
       if(err) throw err;
@@ -65,7 +79,7 @@ router.route('/get_rating/:id').get(function(req, res){
         avg : 7244 / (7244 + 1284),
       },
       ai : {
-        avg : 0.65,
+        avg : Math.random(),
       },
     }
     res.type('text/plain');
