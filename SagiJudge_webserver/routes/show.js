@@ -19,6 +19,20 @@ router.route('/').get(function (req, res){
   res.render('test', {data:'default show'});
 });
 
+router.route('/get_article/:page_id').get(function(req, res){
+  var query = "select * from pages where _id = "+ req.params.page_id+";";
+  pool.query(query, function (err, rows, fields){
+    if(err){
+      console.log(err);
+      res.type('text/plain');
+      res.send("id_err");
+    }
+    //console.log(JSON.stringify(rows));
+    res.type('text/plain');
+    res.send(JSON.stringify(rows));
+  });
+});
+
 router.route('/get_id/:url').get(function(req, res){
   request(req.params.url, function(error, response, html){
   	if (error) {

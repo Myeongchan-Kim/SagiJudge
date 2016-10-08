@@ -14,7 +14,7 @@ var pool = mysql.createPool({
 });
 
 
-var url = 'http://damoadamoa.tistory.com/121';
+var url = 'damoadamoa.tistory.com/121';
 request(url, function(error, response, html){
 	if (error) {throw error};
 
@@ -27,16 +27,15 @@ request(url, function(error, response, html){
 		result += $(this).text() + "\r\n";
 	});
 
-  var title = "";
-  $('div.titleWrap h2 .subs').each(function(){
-		console.log($(this).text());
-    title += $(this).text();
+  $('div.titleWrap h2').each(function(){
+		//console.log($(this).text());
+
 	});
-	var query = "CALL getIdByUrl("+ url + ", "+ title + ", "+ result  +")" ;
-	//console.log("Query: "+ query);
-	//pool.query(query, function (err, rows, fields){
-		//console.log(fields);
-	//});
+	var query = "CALL getIdByUrl("+ url + ", "+ JSON.stringify(result)  +")" ;
+	console.log("Query: "+ query);
+	pool.query(query, function (err, rows, fields){
+		console.log(fields);
+	});
 });
 
 console.log(encodeURIComponent("http://lemontia.tistory.com/50"));
