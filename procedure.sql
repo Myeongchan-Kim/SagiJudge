@@ -153,6 +153,30 @@ BEGIN
             ON a.page_id = b.page_id AND a.opt = b.opt) AS t WHERE t.opt = 2) AS b
     ON a.page_id = b.page_id
     ORDER BY gap;
+END
+--
 
+DROP PROCEDURE IF EXISTS `getDangerPage`;
+--
+CREATE PROCEDURE `getDangerPage`()
+BEGIN
+    select *, norm.pid, norm.ratio - doc.ratio as wrongValue 
+    from 
+       (select page_id as pid, sum(rate) as sum ,count(*) as cnt, sum(rate)/count(*) as ratio 
+        from 
+          (rates 
+          join users 
+            on rates.user_id = users._id and users.opt = 1)
+       group by page_id) as norm
+    join
+       (select page_id as pid, sum(rate) as sum, count(*) as cnt, sum(rate)/count(*) as ratio 
+        from 
+          (rates 
+            join users 
+            on rates.user_id = users._id and users.opt = 2)
+       group by page_id) as doc
+    on norm.pid = doc.pid
+    ORDER BY wrongValue DESC
+    LIMIT 4;
 END
 --
