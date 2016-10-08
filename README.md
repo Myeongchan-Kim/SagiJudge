@@ -5,13 +5,17 @@
 ## url -> ID call
 ```
 /show/get_url/{{url}}  
+```
+```
 res : {id: (id)}
 ```
 
 ## id -> rating call  
 ```
 /show/get_rating/{{id}}  
-result = {
+```
+```
+res :{
       expert :{
         good : 123,
         bad : 55,
