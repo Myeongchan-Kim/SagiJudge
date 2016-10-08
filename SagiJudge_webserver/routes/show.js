@@ -29,7 +29,7 @@ router.route('/get_article/:page_id').get(function(req, res){
     }
     //console.log(JSON.stringify(rows));
     res.type('text/plain');
-    res.send(JSON.stringify(rows));
+    res.send(JSON.stringify(rows[0]));
   });
 });
 
@@ -77,6 +77,51 @@ router.route('/get_id/:url').get(function(req, res){
   	});
   });
 });
+
+router.route('/get_id/:url').post(function(req, res){
+  request(req.body.url, function(error, response, html){
+  	if (error) {
+      console.log(error);
+      res.type('text/plain');
+      res.send("Wrong URI");
+    };
+
+  	// console.log (html);
+
+  	var $ = cheerio.load(html);
+  	var contents = "";
+  	$('#entry div.article p').each(function(){
+  		//console.log($(this).text());
+  		contents += $(this).text() + "\r\n";
+  	});
+    contents = contents.replace(/\\/g, "\\\\")
+     .replace(/\$/g, "\\$")
+     .replace(/'/g, "\\'")
+     .replace(/"/g, "\\\"");
+
+    var title = "";
+    $('div.titleWrap h2 .subs').each(function(){
+  		console.log($(this).text());
+      title += $(this).text();
+  	});
+    title = title.replace(/\\/g, "\\\\")
+     .replace(/\$/g, "\\$")
+     .replace(/'/g, "\\'")
+     .replace(/"/g, "\\\"");
+
+    var URLobj = url.parse(req.body.url);
+    var url_str = URLobj.host + URLobj.path;
+    console.log(encodeURIComponent(url_str) );
+    var query = "CALL getIdByUrl( '"+ encodeURIComponent(url_str) + "', '" + title + "', '"+ contents  +"' )" ;
+    console.log("Query: "+ query);
+  	pool.query(query, function (err, rows, fields){
+      if(err) throw err;
+  		res.type('text/plain');
+      res.send(JSON.stringify(rows[0][0]));
+  	});
+  });
+});
+
 
 router.route('/get_rating/:id').get(function(req, res){
   var query = "";
