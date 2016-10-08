@@ -32,15 +32,14 @@ router.route('/get_id/:url').get(function(req, res){
   		result += $(this).text() + "\r\n";
   	});
 
-    var urlAddr = url.parse(req.params.url);
-    var urlStirng = urlAddr.host + urlAddr.pathname;
-    console.log(urlStirng);
-  	var query = "CALL getIdByUrl("+ urlAddr + ", "+ JSON.stringify(result)  +")" ;
-  	console.log("Query: "+ query);
+    console.log(req.params.url);
+    console.log(encodeURIComponent(req.params.url) );
+    var query = "CALL getIdByUrl( '"+ encodeURIComponent(req.params.url) + "', "+ JSON.stringify(result)  +")" ;
+    console.log("Query: "+ query);
   	pool.query(query, function (err, rows, fields){
-  		console.log(fields);
-      res.type('text/plain');
-      res.send(JSON.stringify(rows));
+      if(err) throw err;
+  		res.type('text/plain');
+      res.send(JSON.stringify(rows[0][0]));
   	});
   });
 });
