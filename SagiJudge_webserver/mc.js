@@ -14,22 +14,22 @@ var pool = mysql.createPool({
 });
 
 
-var url = 'damoadamoa.tistory.com/121';
+var url = 'http://lemontia.tistory.com/50';
 request(url, function(error, response, html){
 	if (error) {throw error};
 
 	// console.log (html);
 
 	var $ = cheerio.load(html);
+  //console.log(html);
 	var result = "";
-	$('#entry div.article p').each(function(){
-		//console.log($(this).text());
+	$('div.article p').each(function(){
+		console.log($(this).text());
 		result += $(this).text() + "\r\n";
 	});
 
-  $('div.titleWrap h2').each(function(){
-		//console.log($(this).text());
-
+  $('div.titleWrap a').each(function(){
+		console.log($(this).text());
 	});
 	var query = "CALL getIdByUrl("+ url + ", "+ JSON.stringify(result)  +")" ;
 	console.log("Query: "+ query);

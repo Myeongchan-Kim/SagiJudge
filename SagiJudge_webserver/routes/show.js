@@ -45,8 +45,8 @@ router.route('/get_id/:url').get(function(req, res){
 
   	var $ = cheerio.load(html);
   	var contents = "";
-  	$('#entry div.article p').each(function(){
-  		//console.log($(this).text());
+    $('div.article p').each(function(){
+  			//console.log($(this).text());
   		contents += $(this).text() + "\r\n";
   	});
     contents = contents.replace(/\\/g, "\\\\")
@@ -55,8 +55,8 @@ router.route('/get_id/:url').get(function(req, res){
      .replace(/"/g, "\\\"");
 
     var title = "";
-    $('div.titleWrap h2 .subs').each(function(){
-  		console.log($(this).text());
+    $('div.titleWrap a').each(function(){
+    	console.log($(this).text());
       title += $(this).text();
   	});
     title = title.replace(/\\/g, "\\\\")
@@ -90,8 +90,8 @@ router.route('/get_id').post(function(req, res){
 
   	var $ = cheerio.load(html);
   	var contents = "";
-  	$('#entry div.article p').each(function(){
-  		//console.log($(this).text());
+    $('div.article p').each(function(){
+  			//console.log($(this).text());
   		contents += $(this).text() + "\r\n";
   	});
     contents = contents.replace(/\\/g, "\\\\")
@@ -100,8 +100,8 @@ router.route('/get_id').post(function(req, res){
      .replace(/"/g, "\\\"");
 
     var title = "";
-    $('div.titleWrap h2 .subs').each(function(){
-  		console.log($(this).text());
+    $('div.titleWrap a').each(function(){
+    	console.log($(this).text());
       title += $(this).text();
   	});
     title = title.replace(/\\/g, "\\\\")
