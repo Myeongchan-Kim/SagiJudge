@@ -69,8 +69,8 @@ res : [
 ```
 /add/user
 body :{
- user_email :
- user_password :
+ user_email : (text)
+ user_password : (text)
  user_type : (int) // 0:alphGo, 1:user , 2:doctor
 }
 ```
