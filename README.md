@@ -29,3 +29,37 @@ res :{
    "ai":{"avg":0.65}
 }
 ```
+
+## 5 users comments.
+```
+/show/get_comments/user/{{page_id}}
+```
+```
+res : [
+    {
+      id: "mc1004",
+      comment: "개사기 꺼져.",
+      rating: 0,
+    },
+    {
+      id: "tawoo",
+      comment: "정말 좋아요~!! ^^.",
+      rating: 1,
+    },
+    {
+      id: "hahahah1925",
+      comment: "아무래도 구라 같은데...",
+      rating: 0,
+    },
+    {
+      id: "Minytong",
+      comment: "아무래도 구라구라왕구라",
+      rating: 0,
+    },
+    {
+      id: "asdf11111",
+      comment: "좋은 정보 감사합니다~!!",
+      rating: 1,
+    },
+  ];
+```
