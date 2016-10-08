@@ -35,4 +35,20 @@ router.route('/comment/').post(function (req, res){
   });
 })
 
+router.route('/user/').post(function (req, res){
+  var user_email = req.body.user_email;
+  var user_password = req.body.user_password;
+  var user_type = req.body.user_type;
+
+  console.log(req.body);
+  var query = "INSERT INTO users (email, password, opt) values ('"
+  + user_email + "', '" + user_password + "', '" + user_type +"');";
+  console.log(query);
+  pool.query(query, function (err, rows, fields){
+    if(err) throw err;
+    res.type('text/plain');
+    res.send(JSON.stringify(rows));
+  });
+})
+
 module.exports = router;
