@@ -7,11 +7,27 @@
 # API LIST
 ## url -> ID call
 ```
-/show/get_id/{{url}}  
+POST
+/show/get_id/
+body :{
+url : {{url}}
+}
 ```
 ```
 res : {id: (id)}
 ```
+## get_article
+```
+/40.74.136.158:3000/show/get_article/{{page_id}}
+```
+```
+res :{
+[
+{"_id":5,
+"url":"http%3A%2F%2Fdamoadamoa.tistory.com%2F123","title":"[무설탕]\"액상과당\"과 \"무설탕\"의 함정","content":"현대인의 비만은 사회적 문제가 될 만큼 심각하다.왜 갑자기 이런 비만이 폭발적으로 늘어나고 있을까? 그 답을 찾아본다...."}]
+}
+```
+
 
 ## id -> rating call  
 ```
