@@ -1,6 +1,9 @@
 # SagiJudge
 사기꾼판별기
 
+# Adress  
+40.74.136.158  
+
 # API LIST
 ## url -> ID call
 ```
