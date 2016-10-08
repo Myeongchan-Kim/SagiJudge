@@ -33,4 +33,4 @@ var pool = mysql.createPool({
 // 	});
 // });
 
-console.log(encodeURIComponent("http://damoadamoa.tistory.com/123"));
+console.log(encodeURIComponent("http://lemontia.tistory.com/50"));
