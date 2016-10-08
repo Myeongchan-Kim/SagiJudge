@@ -128,7 +128,7 @@ router.route('/get_comments/doctor/:id').get(function(req, res){
     },
     {
       id: 'Dr.TW',
-      comment: '진짜같네요',
+      comment: '애매합니다.......',
       rating: 1,
     },
     {
@@ -147,6 +147,192 @@ router.route('/get_comments/doctor/:id').get(function(req, res){
       rating: 0,
     },
   ]
+  res.type('text/plain');
+  res.send(JSON.stringify(result));
+});
+
+router.route('/hot/:user_id').get(function(req, res){
+  var result = [
+    { id : 2,
+      title : 'title2',
+      url : 'www.url.com2',
+      content :'contentntnentntn2',
+      user_rate :{
+        good: 100,
+        bad: 50,
+      },
+      doctor_rate :{
+        good: 10,
+        bad: 21,
+      },
+    },
+    {
+      id : 6,
+      title : 'title6',
+      url : 'www.url.com6',
+      content :'contentntnentntn6',
+      user_rate :{
+        good: 20,
+        bad: 10,
+      },
+      doctor_rate :{
+        good: 10,
+        bad: 11,
+      },
+    },
+    {
+      id : 7,
+      title : 'title7',
+      url : 'www.url.com77',
+      content :'contentntn7cv.zkjhcv.xcentntn2',
+      user_rate :{
+        good: 77,
+        bad: 23,
+      },
+      doctor_rate :{
+        good: 7,
+        bad: 27,
+      },
+    },
+    {
+      id : 8,
+      title : 'title8',
+      url : 'www.url.com8',
+      content :'contentntnent888888888ntn2',
+      user_rate :{
+        good: 88,
+        bad: 8,
+      },
+      doctor_rate :{
+        good: 81,
+        bad: 801,
+      },
+    },
+  ];
+  res.type('text/plain');
+  res.send(JSON.stringify(result));
+});
+
+router.route('/wait/:user_id').get(function(req, res){
+  var result = [
+    { id : 12,
+      title : '가나다2',
+      url : 'www.url.com2',
+      content :'contentntnentntn2',
+      user_rate :{
+        good: 100,
+        bad: 50,
+      },
+      doctor_rate :{
+        good: 10,
+        bad: 21,
+      },
+    },
+    {
+      id : 16,
+      title : 'titㅁㄴㅇㄻㄴㅇㄹe6',
+      url : 'wwwasdfasdfl.com6',
+      content :'contenasdgahdfharhatntnentntn6',
+      user_rate :{
+        good: 20,
+        bad: 10,
+      },
+      doctor_rate :{
+        good: 10,
+        bad: 11,
+      },
+    },
+    {
+      id : 17,
+      title : 'Lacide7',
+      url : 'www.laem.com/77',
+      content :'contentnfasdfatn7cav.zfakjhcv.xcentntn2',
+      user_rate :{
+        good: 77,
+        bad: 23,
+      },
+      doctor_rate :{
+        good: 7,
+        bad: 27,
+      },
+    },
+    {
+      id : 18,
+      title : 'lacicicici88',
+      url : 'www.url.com8',
+      content :'contentntnent888888888ntn2',
+      user_rate :{
+        good: 88,
+        bad: 8,
+      },
+      doctor_rate :{
+        good: 81,
+        bad: 801,
+      },
+    },
+  ];
+  res.type('text/plain');
+  res.send(JSON.stringify(result));
+});
+
+router.route('/wrong/:user_id').get(function(req, res){
+  var result = [
+    { id : 22,
+      title : 'title2',
+      url : 'www.url.com2',
+      content :'contentntnentntn2',
+      user_rate :{
+        good: 100,
+        bad: 50,
+      },
+      doctor_rate :{
+        good: 10,
+        bad: 21,
+      },
+    },
+    {
+      id : 26,
+      title : 'title6',
+      url : 'www.url.com6',
+      content :'contentntnentntn6',
+      user_rate :{
+        good: 20,
+        bad: 10,
+      },
+      doctor_rate :{
+        good: 10,
+        bad: 11,
+      },
+    },
+    {
+      id : 27,
+      title : 'title7',
+      url : 'www.url.com77',
+      content :'contentntn7cv.zkjhcv.xcentntn2',
+      user_rate :{
+        good: 77,
+        bad: 23,
+      },
+      doctor_rate :{
+        good: 7,
+        bad: 27,
+      },
+    },
+    {
+      id : 28,
+      title : 'title8',
+      url : 'www.url.com8',
+      content :'contentntnent888888888ntn2',
+      user_rate :{
+        good: 88,
+        bad: 8,
+      },
+      doctor_rate :{
+        good: 81,
+        bad: 801,
+      },
+    },
+  ];
   res.type('text/plain');
   res.send(JSON.stringify(result));
 });
