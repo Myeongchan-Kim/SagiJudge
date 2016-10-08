@@ -15,4 +15,9 @@ router.route('/').get(function (req, res){
   res.render('test', {data:'default show'});
 });
 
+router.route('/get_url/:url').get(function(req, res){
+  res.type('text/plain');
+  res.send("" + req.params.url + "text");
+});
+
 module.exports = router;
