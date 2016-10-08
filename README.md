@@ -67,6 +67,7 @@ res : [
 
 ## Add User
 ```
+POST
 /add/user
 body :{
  user_email : (text)
@@ -77,6 +78,7 @@ body :{
 
 ## Post comment
 ```
+POST
 /add/comment
 body :{
  page_id : {{page_id}},
