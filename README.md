@@ -65,6 +65,16 @@ res : [
   ];
 ```
 
+## Add User
+```
+/add/user
+body :{
+ user_email :
+ user_password :
+ user_type : (int) // 0:alphGo, 1:user , 2:doctor
+}
+```
+
 ## Post comment
 ```
 /add/comment
@@ -74,4 +84,24 @@ body :{
  user_comment : {{user_comment}},
  user_rating : {{user_rating}},
 }
+```
+
+
+## wait 4
+```
+/show/hot/{{user_id}}
+```
+```
+res : {
+}
+```
+
+## hot 4
+```
+/show/hot/{{user_id}}
+```
+
+## wrong 4
+```
+/show/hot/{{user_id}}
 ```
