@@ -18,9 +18,21 @@ router.route('/').get(function (req, res){
   res.render('test', {data:"default delete"});
 });
 
-router.route('/comment/:page_id').post(function (req, res){
-  var query = "";
+router.route('/comment/').post(function (req, res){
+  var page_id = req.body.page_id;
+  var user_id = req.body.user_id;
+  var user_comment = req.body.user_comment;
+  var user_rating = req.body.user_rating;
 
+  console.log(req.body);
+  var query = "INSERT INTO rates (page_id, user_id, content, rate) values ('"
+  + page_id + "', '" + user_id + "', '" + user_comment + "', '" + user_rating +"');";
+  console.log(query);
+  pool.query(query, function (err, rows, fields){
+    if(err) throw err;
+    res.type('text/plain');
+    res.send(JSON.stringify(rows));
+  });
 })
 
 module.exports = router;
