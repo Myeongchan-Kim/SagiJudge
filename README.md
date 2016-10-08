@@ -4,7 +4,7 @@
 # API LIST
 ## url -> ID call
 ```
-/show/get_url/{{url}}  
+/show/get_id/{{url}}  
 ```
 ```
 res : {id: (id)}

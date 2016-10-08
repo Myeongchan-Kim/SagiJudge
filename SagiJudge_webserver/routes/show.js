@@ -1,28 +1,46 @@
 var express = require('express');
 var router = express.Router();
 var util = require('util');
+var url = require('url');
+
+var cheerio = require('cheerio');
+var request = require('request');
 
 var mysql = require('mysql');
 var pool = mysql.createPool({
   connectionLimit : 10,
   host : '127.0.0.1',
-  database : 'laos',
-  user : 'guest',
-  password : '1234'
+  database : 'lacidem',
+  user : 'lacidem',
+  password : 'lacidem',
 });
 
 router.route('/').get(function (req, res){
   res.render('test', {data:'default show'});
 });
 
-router.route('/get_url/:url').get(function(req, res){
-  var query = "";
-  pool.query(query, function (err, rows, fields){
+router.route('/get_id/:url').get(function(req, res){
+  request(req.params.url, function(error, response, html){
+  	if (error) {throw error};
 
-    // this is dummy data. // MC
-    console.log(JSON.stringify(rows));
-    res.type('text/plain');
-    res.send("13221");
+  	// console.log (html);
+
+  	var $ = cheerio.load(html);
+  	var result = "";
+  	$('#entry div.article p').each(function(){
+  		//console.log($(this).text());
+  		result += $(this).text() + "\r\n";
+  	});
+
+    console.log(req.params.url);
+    console.log(encodeURIComponent(req.params.url) );
+    var query = "CALL getIdByUrl( '"+ encodeURIComponent(req.params.url) + "', "+ JSON.stringify(result)  +")" ;
+    console.log("Query: "+ query);
+  	pool.query(query, function (err, rows, fields){
+      if(err) throw err;
+  		res.type('text/plain');
+      res.send(JSON.stringify(rows[0][0]));
+  	});
   });
 });
 

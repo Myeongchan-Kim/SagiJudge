@@ -49,3 +49,22 @@ CREATE TABLE rates(
     FOREIGN KEY (user_id) REFERENCES users(_id),
     FOREIGN KEY (page_id) REFERENCES pages(_id)
 );
+
+
+-- create stored procedure 'getIdByUrl'
+USE `lacidem`;
+DROP procedure IF EXISTS `getIdByUrl`;
+
+DELIMITER $$
+USE `lacidem`$$
+CREATE PROCEDURE `getIdByUrl`(IN url_str VARCHAR(255), content_text TEXT)
+BEGIN
+INSERT INTO pages (url, content)
+SELECT url_str, content_text
+WHERE NOT EXISTS(
+  SELECT _id FROM pages WHERE url = url_str
+);
+
+END$$
+
+DELIMITER ;

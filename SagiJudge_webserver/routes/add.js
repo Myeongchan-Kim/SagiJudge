@@ -6,10 +6,11 @@ var mysql = require('mysql');
 var pool = mysql.createPool({
   connectionLimit : 10,
   host : '127.0.0.1',
-  database : 'laos',
-  user : 'guest',
-  password : '1234',
+  database : 'lacidem',
+  user : 'lacidem',
+  password : 'lacidem',
 });
+
 
 router.route('/').get(function (req, res){
   res.render('test', {data:"default delete"});
