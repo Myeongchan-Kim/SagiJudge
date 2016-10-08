@@ -8,6 +8,7 @@ drop table if exists users;
 CREATE TABLE users(
     _id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL,
+    opt INT DEFAULT 1 NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
@@ -22,6 +23,7 @@ CREATE TABLE doctors(
 CREATE TABLE pages(
     _id INT PRIMARY KEY AUTO_INCREMENT,
     url VARCHAR(180) NOT NULL,
+    title VARCHAR(255) CHARACTER SET UTF8MB4,
     content TEXT CHARACTER SET UTF8MB4,
     UNIQUE (url)
 );
@@ -44,27 +46,10 @@ CREATE TABLE rates(
     user_id INT,
     page_id INT,
     rate INT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     content TEXT CHARACTER SET UTF8MB4,
     PRIMARY KEY (user_id, page_id),
     FOREIGN KEY (user_id) REFERENCES users(_id),
     FOREIGN KEY (page_id) REFERENCES pages(_id)
 );
 
-
--- create stored procedure 'getIdByUrl'
-USE `lacidem`;
-DROP procedure IF EXISTS `getIdByUrl`;
-
-DELIMITER $$
-USE `lacidem`$$
-CREATE PROCEDURE `getIdByUrl`(IN url_str VARCHAR(255), content_text TEXT)
-BEGIN
-INSERT INTO pages (url, content)
-SELECT url_str, content_text
-WHERE NOT EXISTS(
-  SELECT _id FROM pages WHERE url = url_str
-);
-
-END$$
-
-DELIMITER ;

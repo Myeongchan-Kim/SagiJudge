@@ -25,9 +25,46 @@ def init_db():
     db.close()
 
 
+# def create_proc():
+    # db = connect_db()
+    # with open('./procedure.sql') as f:
+        # cursor = db.cursor()
+        # query = ''
+        # while(True):
+            # query_line = f.readline()
+            # if not query_line:
+                # break
+            # query += query_line
+            # if ';' in query or '$$' in query:
+                # cursor.execute(query)
+                # print 'SUCCESS'
+                # query = ''
+    # db.close()
+
+def create_proc():
+    db = connect_db()
+    with open('./procedure.sql') as f:
+        cursor = db.cursor()
+        query = ''
+        while(True):
+            query_line = f.readline()
+            if not query_line:
+                break;
+            if '--' in query_line:
+                print query
+                cursor.execute(query)
+                print 'SUCCESS'
+                query = ''
+            else:
+                query += query_line
+    db.close()
+
 def main():
     print "initilizing tables..."
     init_db()
+    print "DONE"
+    print "creating procedures..."
+    create_proc()
     print "DONE"
 
 
