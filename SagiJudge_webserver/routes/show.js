@@ -363,6 +363,7 @@ router.route('/wait/:user_id').get(function(req, res){
 });
 
 router.route('/wrong/:user_id').get(function(req, res){
+  /*
   var result = [
     { id : 22,
       title : 'title2',
@@ -420,8 +421,10 @@ router.route('/wrong/:user_id').get(function(req, res){
       },
     },
   ];
-  res.type('text/plain');
-  res.send(JSON.stringify(result));
-});
+*/
+  pool.query('getDangerPage', function (err, rows, fields){
+    res.type('text/plain');
+    res.send(JSON.stringify(rows));
+  });
 
 module.exports = router;
