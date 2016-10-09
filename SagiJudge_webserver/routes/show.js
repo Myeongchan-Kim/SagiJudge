@@ -182,7 +182,8 @@ router.route('/get_comments/doctor/:page_id').get(function(req, res){
   // ]
 
     var query =
-    "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" and content is not null ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 2 LIMIT 5;";
+     "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" and content is not null ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 2 LIMIT 5;";
+
     pool.query(query, function (err, rows, fields){
       if(err) {
         console.log(err);

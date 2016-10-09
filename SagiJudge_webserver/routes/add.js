@@ -25,8 +25,8 @@ router.route('/comment/').post(function (req, res){
   var user_rating = req.body.user_rating;
 
   console.log(req.body);
-  var query = "INSERT INTO rates (page_id, user_id, content, rate) values ('"
-  + page_id + "', '" + user_id + "', '" + user_comment + "', '" + user_rating +"');";
+  var query = "INSERT INTO rates (page_id, user_id, rate, content) values ('"
+  + page_id + "', '" + user_id + "', '" + user_rating + "', '" + user_comment +"');";
   console.log(query);
   pool.query(query, function (err, rows, fields){
     if(err) throw err;
