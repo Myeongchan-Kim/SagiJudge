@@ -33,52 +33,6 @@ router.route('/get_article/:page_id').get(function(req, res){
   });
 });
 
-router.route('/get_id/:url').get(function(req, res){
-  request(req.params.url, function(error, response, html){
-  	if (error) {
-      console.log(error);
-      res.type('text/json');
-      res.send("Wrong URI");
-    };
-
-  	// console.log (html);
-
-  	var $ = cheerio.load(html);
-  	var contents = "";
-    $('div p').each(function(){
-  			//console.log($(this).text());
-  		contents += $(this).text() + "\r\n";
-  	});
-    contents = contents.replace(/\\/g, "\\\\")
-     .replace(/\$/g, "\\$")
-     .replace(/'/g, "\\'")
-     .replace(/"/g, "\\\"");
-
-    var title = "";
-
-    $('title').each(function(){
-      console.log($(this).text());
-      title += $(this).text();
-  	});
-    title = title.replace(/\\/g, "\\\\")
-     .replace(/\$/g, "\\$")
-     .replace(/'/g, "\\'")
-     .replace(/"/g, "\\\"");
-
-    //console.log(req.params.url);
-    var URLobj = url.parse(req.params.url);
-    var url_str = URLobj.host + URLobj.path;
-    console.log(encodeURIComponent(url_str) );
-    var query = "CALL getIdByUrl( '"+ encodeURIComponent(url_str) + "', '" + title + "', '"+ contents  +"' )" ;
-    console.log("Query: "+ query);
-  	pool.query(query, function (err, rows, fields){
-      if(err) throw err;
-  		res.type('text/json');
-      res.send(JSON.stringify(rows[0][0]));
-  	});
-  });
-});
-
 router.route('/get_id').post(function(req, res){
   request(req.body.url, function(error, response, html){
   	if (error) {
@@ -126,24 +80,27 @@ router.route('/get_id').post(function(req, res){
 
 
 router.route('/get_rating/:id').get(function(req, res){
-  var query = "";
+  var query = "CALL getRateOfPageById("+req.params.id+");";
   pool.query(query, function (err, rows, fields){
+    if(err) throw err;
 
     // this is dummy data. // MC
+    console.log(JSON.stringify(rows[0]));
+    var ai_score = {};
+    var public_user_score = {}
+    for(id in rows[0])
+    {
+      if(rows[0][id].opt == 0)
+        ai_score = rows[0][id];
+      else if(rows[0][id].opt == 1)
+        public_user_score = rows[0][id];
+      else if(rows[0][id].opt == 2)
+        expret_score = rows[0][id];
+    }
     var result = {
-      expert :{
-        good : 123,
-        bad : 55,
-        avg : 123 / (123 + 55),
-      },
-      public_user :{
-        good : 7244,
-        bad : 1284,
-        avg : 7244 / (7244 + 1284),
-      },
-      ai : {
-        avg : Math.random(),
-      },
+      expert : expret_score,
+      public_user : public_user_score,
+      ai : ai_score,
     }
     res.type('text/json');
     res.send(result);
