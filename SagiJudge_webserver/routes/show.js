@@ -198,65 +198,74 @@ router.route('/get_comments/doctor/:page_id').get(function(req, res){
 });
 
 router.route('/hot/:user_id').get(function(req, res){
-  var result = [
-    { id : 2,
-      title : 'title2',
-      url : 'www.url.com2',
-      content :'contentntnentntn2',
-      user_rate :{
-        good: 100,
-        bad: 50,
-      },
-      doctor_rate :{
-        good: 10,
-        bad: 21,
-      },
-    },
-    {
-      id : 6,
-      title : 'title6',
-      url : 'www.url.com6',
-      content :'contentntnentntn6',
-      user_rate :{
-        good: 20,
-        bad: 10,
-      },
-      doctor_rate :{
-        good: 10,
-        bad: 11,
-      },
-    },
-    {
-      id : 7,
-      title : 'title7',
-      url : 'www.url.com77',
-      content :'contentntn7cv.zkjhcv.xcentntn2',
-      user_rate :{
-        good: 77,
-        bad: 23,
-      },
-      doctor_rate :{
-        good: 7,
-        bad: 27,
-      },
-    },
-    {
-      id : 8,
-      title : 'title8',
-      url : 'www.url.com8',
-      content :'contentntnent888888888ntn2',
-      user_rate :{
-        good: 88,
-        bad: 8,
-      },
-      doctor_rate :{
-        good: 81,
-        bad: 801,
-      },
-    },
-  ];
-  res.type('text/json');
-  res.send(JSON.stringify(result));
+  // var result = [
+  //   { id : 2,
+  //     title : 'title2',
+  //     url : 'www.url.com2',
+  //     content :'contentntnentntn2',
+  //     user_rate :{
+  //       good: 100,
+  //       bad: 50,
+  //     },
+  //     doctor_rate :{
+  //       good: 10,
+  //       bad: 21,
+  //     },
+  //   },
+  //   {
+  //     id : 6,
+  //     title : 'title6',
+  //     url : 'www.url.com6',
+  //     content :'contentntnentntn6',
+  //     user_rate :{
+  //       good: 20,
+  //       bad: 10,
+  //     },
+  //     doctor_rate :{
+  //       good: 10,
+  //       bad: 11,
+  //     },
+  //   },
+  //   {
+  //     id : 7,
+  //     title : 'title7',
+  //     url : 'www.url.com77',
+  //     content :'contentntn7cv.zkjhcv.xcentntn2',
+  //     user_rate :{
+  //       good: 77,
+  //       bad: 23,
+  //     },
+  //     doctor_rate :{
+  //       good: 7,
+  //       bad: 27,
+  //     },
+  //   },
+  //   {
+  //     id : 8,
+  //     title : 'title8',
+  //     url : 'www.url.com8',
+  //     content :'contentntnent888888888ntn2',
+  //     user_rate :{
+  //       good: 88,
+  //       bad: 8,
+  //     },
+  //     doctor_rate :{
+  //       good: 81,
+  //       bad: 801,
+  //     },
+  //   },
+  // ];
+  var query = "CALL getHotPages();";
+  pool.query(query, function (err, rows, fields){
+    if(err){
+      console.log(err);
+      res.type('text/json');
+      res.send("id_err");
+    }
+    console.log(JSON.stringify(rows));
+    res.type('text/json');
+    res.send(JSON.stringify(rows[0]));
+  });
 });
 
 router.route('/wait/:user_id').get(function(req, res){
