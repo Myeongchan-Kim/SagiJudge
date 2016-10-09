@@ -173,7 +173,7 @@ def concate_tuple(t):
     return '%s_%s' % t
 
 
-def analize_text(post_id, text):
+def analize_text(page_id, text):
     lines = convert_text_to_lines(text)
     sentences = do_sentencing_without_threading(lines)
     morphs_list = do_parsing_without_threading(sentences)
@@ -181,9 +181,10 @@ def analize_text(post_id, text):
     for morphs in morphs_list:
         for morph in morphs:
             s.setdefault(morph[1], []).append(morph[0])
-    with open('./pickles/dump_%d.pkl'%(post_id), 'w') as f:
-        morphs = pickle.dump(dict(s), f);
+    # with open('./pickles/dump_%d.pkl'%(post_id), 'w') as f:
+        # morphs = pickle.dump(dict(s), f);
     save_tags(page_id, getCount(dict(s)))
+    save_rate(page_id, dict(s))
     return True
 
 
@@ -285,18 +286,19 @@ def main():
     for row in cur.fetchall():
         post_id = row[0]
         content = row[1]
+        if not content: continue
         analize_text(post_id, content)
-    db.close()
+    # db.close()
 
 
 if __name__=='__main__':
-    # main()
-    for filename in listdir('./pickles'):
-        if '.pkl' in filename:
-            with open('./pickles/'+filename, 'r') as f:
-                obj = pickle.load(f)
-                page_id = filename.split('.')[0].split('_')[1]
-                save_rate(page_id, obj)
+    main()
+    # for filename in listdir('./pickles'):
+        # if '.pkl' in filename:
+            # with open('./pickles/'+filename, 'r') as f:
+                # obj = pickle.load(f)
+                # page_id = filename.split('.')[0].split('_')[1]
+                # save_rate(page_id, obj)
                 # save_tags(page_id, getCount(obj))
 
 
