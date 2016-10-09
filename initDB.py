@@ -79,9 +79,9 @@ def main():
     # init_db('./dummy.sql')
     print "DONE"
     print "creating procedures..."
-    # create_proc()
+    create_proc()
     print "DONE"
-    genDummy()
+    # genDummy()
     print "dummyGen"
 
 
