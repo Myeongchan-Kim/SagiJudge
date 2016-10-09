@@ -137,7 +137,7 @@ router.route('/get_comments/user/:page_id').get(function(req, res){
   // ];
 
   var query =
-  "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 1 LIMIT 5;";
+  "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 1 OERDER BY timestamp DESC LIMIT 5;";
   pool.query(query, function (err, rows, fields){
     if(err) {
       console.log(err);
@@ -410,7 +410,7 @@ router.route('/wrong/:user_id').get(function(req, res){
     },
   ];
 
-  var query = "CALL getDangerousPages()";
+  var query = "CALL  getDangerousPages()";
   pool.query(query, function (err, rows, fields){
     if(err){
       console.log(err);
