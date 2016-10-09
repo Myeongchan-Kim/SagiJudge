@@ -6,13 +6,14 @@ from konlpy.utils import pprint
 from threading import Thread
 from more_itertools import unique_everseen
 from collections import defaultdict, Counter
+from os import listdir
 import cPickle as pickle
 import operator
 import jpype
 import multiprocessing
-import os
 import psutil
 import sys
+import math
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import imp
@@ -180,20 +181,102 @@ def analize_text(post_id, text):
     for morphs in morphs_list:
         for morph in morphs:
             s.setdefault(morph[1], []).append(morph[0])
-    with open('./dump_%d.pkl'%(post_id), 'w') as f:
+    with open('./pickles/dump_%d.pkl'%(post_id), 'w') as f:
         morphs = pickle.dump(dict(s), f);
+    save_tags(page_id, getCount(dict(s)))
+    return True
 
+
+def getCount(dic):
     cnt = {}
-    for key, val in dict(s).iteritems():
+    for key, val in dic.iteritems():
         if key == 'Noun':
             cnt = Counter(val)
     cnt = dict(cnt)
     sorted_cnt = sorted(cnt.items(), key=operator.itemgetter(1), reverse=True)
+    return sorted_cnt
 
-    if sorted_cnt:
-        return sorted_cnt[0:min(len(sorted_cnt), 5)]
-    else:
-        return None
+
+def save_tags(page_id, lst):
+    if not lst:
+        return
+    words = []
+    count = 0
+    for word, cnt in lst:
+        if len(word) < 2:
+            continue
+        words.append(word)
+        count += 1
+        if count >= 5:
+            break
+    db = connect_db()
+    cur = db.cursor()
+    print words
+    cur.executemany('insert ignore into tags (page_id, tag) values(%s, %s)',
+                    map(lambda x: (page_id, x), words));
+    db.commit()
+    db.close()
+    return True
+
+
+def sigmoid(x):
+      return 1 / (1 + math.exp(-x))
+
+def score_eomi(lst):
+    if not lst:
+        return 0;
+    eomi_total = len(lst)
+    eomi_cnt = dict(Counter(lst))
+    eomi_yo = 0
+    if u'요' in eomi_cnt:
+        eomi_yo += eomi_cnt[u'요']
+    eomi_da = 0
+    if u'다' in eomi_cnt:
+        eomi_da += eomi_cnt[u'다']
+    return sigmoid(eomi_da - eomi_yo)
+
+def score_word(lst):
+    if not lst:
+        return 0;
+    lst = filter(lambda x: len(x) >= 2, lst)
+    dic = dict(Counter(lst))
+    neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대',
+                 '꼭', '완전히', '안돼', '완전', '최고']
+    neg_words = map(lambda x: u''+x, neg_words)
+    neg_cnt = 0
+    for word in neg_words:
+        if word in dic:
+            neg_cnt += dic[word]
+    pos_words = ['질환', '효과', '비교적', '안전', '낫다', '조직']
+    pos_words = map(lambda x: u''+x, pos_words)
+    pos_cnt = 0
+    for word in pos_words:
+        if word in dic:
+            pos_cnt += dic[word]
+    return sigmoid(pos_cnt - neg_cnt)
+
+def get_rate(dic):
+    lst = []
+    val_word = 0
+    val_eomi = 0
+    for key, val in dic.iteritems():
+        lst.extend(val)
+        val_word = score_word(lst)
+    if 'Eomi' in dic:
+        val_eomi = score_eomi(dic['Eomi'])
+    return (val_word + val_eomi)/2
+
+def save_rate(page_id, dic):
+    rate = 100*get_rate(dic)
+    if rate:
+        db = connect_db()
+        cur = db.cursor()
+        cur.execute('insert into rates (user_id, page_id, rate) values (%s, %s, %s)',
+                    (str(-1), str(page_id), str(rate)));
+        db.commit()
+        db.close()
+    return True
+
 
 def main():
     db = connect_db()
@@ -202,8 +285,18 @@ def main():
     for row in cur.fetchall():
         post_id = row[0]
         content = row[1]
-        pprint(analize_text(post_id, content))
+        analize_text(post_id, content)
     db.close()
 
+
 if __name__=='__main__':
-    main()
+    # main()
+    for filename in listdir('./pickles'):
+        if '.pkl' in filename:
+            with open('./pickles/'+filename, 'r') as f:
+                obj = pickle.load(f)
+                page_id = filename.split('.')[0].split('_')[1]
+                save_rate(page_id, obj)
+                # save_tags(page_id, getCount(obj))
+
+
