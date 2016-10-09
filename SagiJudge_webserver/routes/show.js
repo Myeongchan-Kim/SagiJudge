@@ -107,6 +107,19 @@ router.route('/get_rating/:id').get(function(req, res){
   });
 });
 
+router.route('/get_rating_com/:id').get(function(req, res){
+  var query = "CALL getComputerRate("+req.params.id+");";
+  console.log(query);
+  pool.query(query, function (err, rows, fields){
+    if(err) throw err;
+    // this is dummy data. // MC
+    console.log(JSON.stringify(rows[0]));
+    var result = JSON.stringify(rows[0]);
+    res.type('text/json');
+    res.send(result);
+  });
+});
+
 router.route('/get_comments/user/:page_id').get(function(req, res){
   // var result = [
   //   {
