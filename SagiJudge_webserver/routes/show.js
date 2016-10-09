@@ -195,9 +195,9 @@ router.route('/get_comments/doctor/:page_id').get(function(req, res){
         if(key == 1)
           result[key]['sub_special'] = "가정의학과";
         else if (key == 2)
-          result[key]'sub_special'] = "재활의학과";
+          result[key]['sub_special'] = "재활의학과";
         else
-          result[key]'sub_special'] = "내과";
+          result[key]['sub_special'] = "내과";
 
         result[key]['grade'] = 3;
       }
@@ -351,6 +351,7 @@ router.route('/wait/:user_id').get(function(req, res){
 });
 
 router.route('/wrong/:user_id').get(function(req, res){
+
   var result = [
     { id : 22,
       title : 'title2',
@@ -408,8 +409,18 @@ router.route('/wrong/:user_id').get(function(req, res){
       },
     },
   ];
-  res.type('text/json');
-  res.send(JSON.stringify(result));
+
+  var query = "getDangerousPages()";
+  pool.query(query, function (err, rows, fields){
+    if(err){
+      console.log(err);
+      res.type('text/json');
+      res.send("wait_err");
+    }
+    console.log(JSON.stringify(rows));
+    res.type('text/json');
+    res.send(JSON.stringify(rows[0]));
+  });
 });
 
 module.exports = router;
