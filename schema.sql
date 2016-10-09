@@ -30,16 +30,9 @@ CREATE TABLE pages(
 
 CREATE TABLE tags(
     _id INT PRIMARY KEY AUTO_INCREMENT,
-    tag VARCHAR(128) CHARACTER SET UTF8MB4,
-    UNIQUE KEY `idx_tag` (`tag`) USING HASH
-);
-
-CREATE TABLE page_tag_rels(
     page_id INT,
-    tag_id INT,
-    PRIMARY KEY (page_id, tag_id),
-    FOREIGN KEY (page_id) REFERENCES pages(_id),
-    FOREIGN KEY (tag_id) REFERENCES tags(_id)
+    tag VARCHAR(128) CHARACTER SET UTF8MB4,
+    FOREIGN KEY (page_id) REFERENCES pages(_id)
 );
 
 CREATE TABLE rates(

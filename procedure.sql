@@ -101,6 +101,17 @@ BEGIN
     ON a.page_id = b.page_id AND a.opt = b.opt;
 END
 --
+DROP PROCEDURE IF EXISTS `getComputerRate`;
+--
+CREATE PROCEDURE `getComputerRate`()
+BEGIN
+    SELECT p._id as page_id, r.rate as score
+    FROM rates as r
+    JOIN pages as p
+    ON p._id = r.page_id
+    WHERE r.user_id = -1;
+END
+--
 
 DROP PROCEDURE IF EXISTS `getDangerousPages`;
 --
