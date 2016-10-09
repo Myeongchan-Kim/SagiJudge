@@ -33,7 +33,7 @@ def connect_db():
 
 
 def convert_text_to_lines(text):
-    if not text: return
+    if not text: return []
     lines = text.split('\n')
     ret = []
     for line in lines:
