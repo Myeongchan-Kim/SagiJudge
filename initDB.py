@@ -62,8 +62,8 @@ def create_proc():
 
 def main():
     print "initilizing tables..."
-    init_db('./schema.sql')
-    init_db('./dummy.sql')
+    # init_db('./schema.sql')
+    # init_db('./dummy.sql')
     print "DONE"
     print "creating procedures..."
     create_proc()

@@ -181,12 +181,15 @@ def analize_text(post_id, text):
         for morph in morphs:
             s.setdefault(morph[1], []).append(morph[0])
     with open('./dump_%d.pkl'%(post_id), 'w') as f:
-        morphs = pickle.load(dict(s), f);
+        morphs = pickle.dump(dict(s), f);
+
+    cnt = {}
     for key, val in dict(s).iteritems():
         if key == 'Noun':
             cnt = Counter(val)
     cnt = dict(cnt)
     sorted_cnt = sorted(cnt.items(), key=operator.itemgetter(1), reverse=True)
+
     if sorted_cnt:
         return sorted_cnt[0:min(len(sorted_cnt), 5)]
     else:

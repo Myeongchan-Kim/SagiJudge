@@ -1,5 +1,4 @@
-parsing.py
-initDB.py
+*.pkl
 database_info.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
