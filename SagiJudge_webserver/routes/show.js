@@ -337,6 +337,7 @@ router.route('/wait/:user_id').get(function(req, res){
     console.log(JSON.stringify(rows));
     res.type('text/json');
     res.send(JSON.stringify(rows[0]));
+  });
 });
 
 router.route('/wrong/:user_id').get(function(req, res){
