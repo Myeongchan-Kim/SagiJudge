@@ -33,6 +33,7 @@ def connect_db():
 
 
 def convert_text_to_lines(text):
+    if not text: return
     lines = text.split('\n')
     ret = []
     for line in lines:
@@ -186,7 +187,10 @@ def analize_text(post_id, text):
             cnt = Counter(val)
     cnt = dict(cnt)
     sorted_cnt = sorted(cnt.items(), key=operator.itemgetter(1), reverse=True)
-    return sorted_cnt[0:5]
+    if sorted_cnt:
+        return sorted_cnt[0:min(len(sorted_cnt), 5)]
+    else:
+        return None
 
 def main():
     db = connect_db()
