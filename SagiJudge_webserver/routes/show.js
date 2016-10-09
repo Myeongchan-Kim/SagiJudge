@@ -326,8 +326,17 @@ router.route('/wait/:user_id').get(function(req, res){
       },
     },
   ];
-  res.type('text/json');
-  res.send(JSON.stringify(result));
+
+  var query = "CALL getWatingPages();";
+  pool.query(query, function (err, rows, fields){
+    if(err){
+      console.log(err);
+      res.type('text/json');
+      res.send("wait_err");
+    }
+    console.log(JSON.stringify(rows));
+    res.type('text/json');
+    res.send(JSON.stringify(rows[0]));
 });
 
 router.route('/wrong/:user_id').get(function(req, res){
