@@ -107,6 +107,19 @@ router.route('/get_rating/:id').get(function(req, res){
   });
 });
 
+router.route('/get_rating_com/:id').get(function(req, res){
+  var query = "CALL getComputerRate("+req.params.id+");";
+  console.log(query);
+  pool.query(query, function (err, rows, fields){
+    if(err) throw err;
+    // this is dummy data. // MC
+    console.log(JSON.stringify(rows[0]));
+    var result = JSON.stringify(rows[0]);
+    res.type('text/json');
+    res.send(result);
+  });
+});
+
 router.route('/get_comments/user/:page_id').get(function(req, res){
   // var result = [
   //   {
@@ -182,7 +195,8 @@ router.route('/get_comments/doctor/:page_id').get(function(req, res){
   // ]
 
     var query =
-    "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 2 LIMIT 5;";
+     "SELECT u._id, u.email, p.content, timestamp FROM	(SELECT * FROM rates WHERE page_id = " + req.params.page_id+" and content is not null ORDER BY timestamp desc) as p LEFT JOIN users as u on p.user_id = u._id WHERE u.opt = 2 LIMIT 5;";
+
     pool.query(query, function (err, rows, fields){
       if(err) {
         console.log(err);
