@@ -410,12 +410,13 @@ router.route('/wrong/:user_id').get(function(req, res){
     },
   ];
 
-  var query = "getDangerousPages()";
+  var query = "CALL getDangerousPages()";
   pool.query(query, function (err, rows, fields){
     if(err){
       console.log(err);
       res.type('text/json');
-      res.send("wait_err");
+      res.send("get Wrong err");
+      return;
     }
     console.log(JSON.stringify(rows));
     res.type('text/json');
