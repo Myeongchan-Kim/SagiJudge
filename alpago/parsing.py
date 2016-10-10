@@ -252,7 +252,7 @@ def score_word(lst):
     for word in neg_words:
         if word in dic:
             neg_cnt += dic[word]
-    pos_words = ['질환', '효과', '비교적', '안전', '낫다', '조직', '다소', '출처']
+    pos_words = ['비교적', '안전', '낫다', '조직', '다소', '출처', '비판']
     pos_words = map(lambda x: u''+x, pos_words)
     pos_cnt = 0
     for word in pos_words:
