@@ -243,7 +243,7 @@ def score_eomi(lst):
 def score_word(lst):
     if not lst:
         return 0;
-    lst = filter(lambda x: len(x) >= 2, lst)
+    lst = filter(lambda x: len(x) >= 1, lst)
     dic = dict(Counter(lst))
     neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대',
                  '꼭', '완전히', '안돼', '완전', '최고', '반드시', '암', '정화']
