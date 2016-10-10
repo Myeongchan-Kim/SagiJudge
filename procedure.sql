@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS `getIdByUrl`;
 --
 CREATE PROCEDURE `getIdByUrl`(IN url_str VARCHAR(255), title_str VARCHAR(255), content_text TEXT)
 BEGIN
-    INSERT INTO pages (url, title, content) 
+    INSERT INTO pages (url, title, content)
     select * from (SELECT url_str, title_str, content_text) as tmp
     WHERE NOT EXISTS(
           SELECT _id FROM pages as p WHERE p.url = tmp.url_str
@@ -92,8 +92,8 @@ DROP PROCEDURE IF EXISTS `getRateOfPageById`;
 --
 CREATE PROCEDURE `getRateOfPageById`(IN page_id INT)
 BEGIN
-    SELECT u.opt, sum(rate) as good , count(*) - sum(rate) as bad ,avg(rate) as avg 
-    FROM     
+    SELECT u.opt, sum(rate) as good , count(*) - sum(rate) as bad ,avg(rate) as avg
+    FROM
        (SELECT * FROM rates WHERE page_id = page_id) as r
        LEFT JOIN users as u
         ON u._id = r.user_id
@@ -199,19 +199,19 @@ DROP PROCEDURE IF EXISTS `getDangerousPages`;
 --
 CREATE PROCEDURE `getDangerousPages`()
 BEGIN
-    select *, norm.pid, norm.ratio - doc.ratio as wrongValue 
-    from 
-       (select page_id as pid, sum(rate) as sum ,count(*) as cnt, sum(rate)/count(*) as ratio 
-        from 
-          (rates 
-          join users 
+    select *, norm.pid, norm.ratio - doc.ratio as wrongValue
+    from
+       (select page_id as pid, sum(rate) as sum ,count(*) as cnt, sum(rate)/count(*) as ratio
+        from
+          (rates
+          join users
             on rates.user_id = users._id and users.opt = 1)
        group by page_id) as norm
     join
-       (select page_id as pid, sum(rate) as sum, count(*) as cnt, sum(rate)/count(*) as ratio 
-        from 
-          (rates 
-            join users 
+       (select page_id as pid, sum(rate) as sum, count(*) as cnt, sum(rate)/count(*) as ratio
+        from
+          (rates
+            join users
             on rates.user_id = users._id and users.opt = 2)
        group by page_id) as doc
     on norm.pid = doc.pid
@@ -226,19 +226,19 @@ CREATE PROCEDURE `getDangerousPages`()
 BEGIN
     SELECT result.pid, p.title, p.content
     FROM (
-        select doc.sum as doc, norm.sum as norm, norm.pid, norm.ratio - doc.ratio as wrongValue 
-        from 
-           (select page_id as pid, sum(rate) as sum ,count(*) as cnt, sum(rate)/count(*) as ratio 
-               from 
-                 (rates 
-                         join users 
+        select doc.sum as doc, norm.sum as norm, norm.pid, norm.ratio - doc.ratio as wrongValue
+        from
+           (select page_id as pid, sum(rate) as sum ,count(*) as cnt, sum(rate)/count(*) as ratio
+               from
+                 (rates
+                         join users
                               on rates.user_id = users._id and users.opt = 1)
                            group by page_id) as norm
                     join
-                       (select page_id as pid, sum(rate) as sum, count(*) as cnt, sum(rate)/count(*) as ratio 
-                           from 
-                             (rates 
-                                      join users 
+                       (select page_id as pid, sum(rate) as sum, count(*) as cnt, sum(rate)/count(*) as ratio
+                           from
+                             (rates
+                                      join users
                                           on rates.user_id = users._id and users.opt = 2)
                                        group by page_id) as doc
                                 on norm.pid = doc.pid
@@ -317,3 +317,14 @@ BEGIN
 END
 --
 
+DROP PROCEDURE IF EXISTS `getNewPages`;
+--
+CREATE PROCEDURE `getNewPages`()
+BEGIN
+    SELECT p._id AS page_id, p.content
+    FROM pages as p
+    LEFT JOIN rates as r
+    ON p._id = r.page_id
+    WHERE TRUE;
+END
+--
