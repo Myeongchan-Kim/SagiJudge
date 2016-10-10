@@ -27,7 +27,7 @@ app.set('port', process.env.PORT || 3000);
 
 
 app.get('/', function(req, res){
-  res.render('index', {userName : "123"});
+  res.redirect("static/index.html");
 });
 
 var showPage =  require('./routes/show');

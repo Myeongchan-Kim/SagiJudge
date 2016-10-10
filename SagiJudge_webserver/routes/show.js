@@ -34,11 +34,15 @@ router.route('/get_article/:page_id').get(function(req, res){
 });
 
 router.route('/get_id').post(function(req, res){
-  request(req.body.url, function(error, response, html){
+  var urlString  = req.body.url;
+  if(urlString.substring(0,4) != "http")
+    urlString = "http://" + urlString;
+  request(urlString, function(error, response, html){
   	if (error) {
       console.log(error);
       res.type('text/json');
       res.send("Wrong URI");
+      return;
     };
 
   	// console.log (html);

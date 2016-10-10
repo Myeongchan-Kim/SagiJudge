@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MEDICOP, 가짜 의료 정보 판별기</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scaleable=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style type="text/css">
+					@font-face {
+							font-family: 'NotoSans-Thin';
+							font-style: normal;
+							font-weight: 100;
+							src: local('Noto Sans Thin'), local('Noto Sans Thin'), local('Noto Sans Thin');
+							src: url(./font/NotoSans-Thin.eot);
+							src: url(./font/NotoSans-Thin.eot?#iefix) format('embedded-opentype'),
+							url(./font/NotoSans-Thin.woff) format('woff'),
+							url(./font/NotoSans-Thin.otf) format('truetype');
+					}
+
+					@font-face {
+							font-family: 'NotoSans-Light';
+							font-style: normal;
+							font-weight: 150;
+							src: local('Noto Sans Light'), local('Noto Sans Light'), local('Noto Sans Light');
+							src: url(./font/NotoSans-Light.eot);
+							src: url(./font/NotoSans-Light.eot?#iefix) format('embedded-opentype'),
+							url(./font/NotoSans-Light.woff) format('woff'),
+							url(./font/NotoSans-Light.otf) format('truetype');
+					}
+
+					@font-face {
+							font-family: 'NotoSans-DemiLight';
+							font-style: normal;
+							font-weight: 200;
+							src: local('Noto Sans DemiLight'), local('Noto Sans DemiLight'), local('Noto Sans DemiLight');
+							src: url(./font/NotoSans-DemiLight.eot);
+							src: url(./font/NotoSans-DemiLight.eot?#iefix) format('embedded-opentype'),
+							url(./font/NotoSans-DemiLight.woff) format('woff'),
+							url(./font/NotoSans-DemiLight.otf) format('truetype');
+					}
+
+
+					@font-face {
+							font-family: 'NotoSans-Medium';
+							font-style: normal;
+							font-weight: 300;
+							src: local('Noto Sans Medium'), local('Noto Sans Medium'), local('Noto Sans Medium');
+							src: url(./font/NotoSans-Medium.eot);
+							src: url(./font/NotoSans-Medium.eot?#iefix) format('embedded-opentype'),
+							url(./font/NotoSans-Medium.woff) format('woff'),
+							url(./font/NotoSans-Medium.otf) format('truetype');
+					}
+
+					@font-face {
+							font-family: 'NotoSans-Bold';
+							font-style: normal;
+							font-weight: 400;
+							src: local('Noto Sans Bold'), local('Noto Sans Bold'), local('Noto Sans Bold');
+							src: url(./font/NotoSans-Bold.eot);
+							src: url(./font/NotoSans-Bold.eot?#iefix) format('embedded-opentype'),
+							url(./font/NotoSans-Bold.woff) format('woff'),
+							url(./font/NotoSans-Bold.otf) format('truetype');
+					}
+
+					a {
+							text-decoration: none;
+							
+					}
+            .collapse {
+                height: auto;
+                width: auto;
+            }
+
+            .collapse.height {
+              position: relative;
+              height: 0;
+              overflow: hidden;
+              -webkit-transition: height 0.35s ease;
+              -moz-transition: height 0.35s ease;
+              -o-transition: height 0.35s ease;
+              transition: height 0.35s ease;
+            }
+            .collapse.width {
+              position: relative;
+              width: 0;
+              overflow: hidden;
+              -webkit-transition: width 0.35s ease;
+              -moz-transition: width 0.35s ease;
+              -o-transition: width 0.35s ease;
+              transition: width 0.35s ease;
+            }
+            .collapse.in.width {
+              width: auto;
+            }
+            .collapse.in.height {
+              height: auto;
+            }
+            .background-main {
+              background-image: url('./images/bg.jpeg');
+              background-position: center center;
+              background-size: cover;
+            }
+            .search {
+              padding-top:60px;
+              padding-bottom:100px;
+							color:white; 
+              text-align:center;
+              font-family: "NotoSans-Light";
+            }
+
+            .container, body {
+            width: 100%;
+            margin:0;
+            padding:0;
+
+          }
+
+          .top-menu {
+            font-family: "NotoSans-Thin";
+            padding-top: 30px;
+            padding-right: 20px;
+          }
+          .top-menu a{
+            border-left: 2px solid white;
+            padding-left: 30px;
+            padding-right:30px;
+            color: white;
+            font-size: 12px;
+          }
+
+          .content {
+            padding-top: 20px;
+            background-color: white;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            
+          }
+
+          .content p {
+            margin: 3px;
+            
+          
+          }
+          .col-content {
+            padding:0; margin-right:10px; width: 24%;
+          }
+          .tag-box {
+            margin-top: 25px;
+
+          }
+          .cards h3 {
+
+            font-family: "NotoSans-Bold";
+            margin-bottom: 40px;
+          }
+
+          .tag-box  a{
+
+            border-radius: 20px;
+            border: 1px solid white;
+            padding: 3px 18px 4px 18px;
+            color: white;
+            margin-left: 10px; margin-right:10px;
+          
+          }
+
+          .content .tag {
+            color: #70B2FF;
+            margin-right: 10px;
+          }
+
+          .like {
+            color: black;
+          
+          }
+        </style>
+    </head>
+    
+    <body>
+        <div class="container">
+          <div class="row background-main">
+
+            <div class="col-sm-12 col-md-12 text-right top-menu">
+              <a href="#">ABOUT US</a>
+              <a href="#loginModal" data-toggle="modal" data-target="#loginModal">LOG IN</a>
+              <a href="#loginModal" data-toggle="modal" data-target="#loginModal">SIGN UP</a>
+
+            </div>
+
+						<div class="col-sm-12 col-md-12 search">
+							<p><img src="./images/logo.svg" style="width:120px;"/></p>
+              <p style="line-height: 32px; margin-top:30px; font-size:18px;">믿을만한 정보일까?<br>가짜 의료 정보 판별기</p>
+              <input type="text" id="search_input" class="form-control" style="width:500px; margin:0 auto; border-radius:0px; margin-top:30px; height:50px; font-size: 16px; padding-left:15px;" placeholder="의심스러운 URL을 입력하세요...">
+              
+              <textarea id="text_box" class="form-control" style="width:500px; margin:0 auto; border-radius: 0px; margin-top:30px; font-size:16px; padding: 15px; display:none;" rows="6"placeholder="의심스러운 내용을 붙여넣으세요."></textarea>
+              <img src="./images/search.png" style="position:absolute; margin-top:-38px; margin-left: 212px; width: 26px; cursor:pointer;" id="search_btn">
+              <img src="./images/text.png" style="position:absolute; margin-top:-38px; margin-left: 265px; width: 30px; cursor:pointer;" id="search_text">
+
+              <div class="col-sm-12 col-md-12 tag-box">
+                <a href="#">#비염</a>
+                <a href="#">#아토피</a>
+                <a href="#">#예방주사</a>
+                <a href="#">#메르스</a>
+                <a href="#">#하임리히</a>
+              </div>
+            </div>
+					</div>
+          <div class="row jumbotron" style="margin-bottom:0px;">
+            <div class="col-sm-12 col-md-12 cards" style="margin:0;">
+              <h3>당신의 평가를 기다리는 글</h3>
+              <div class="col-sm-12 col-md-12" style = "margin:0; padding:0;">
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content" style="padding:0; margin-right:0px;">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+
+
+              <h3>HOT ISSUE</h3>
+              <div class="col-sm-12 col-md-12" style = "margin:0; padding:0;">
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content" style="padding:0; margin-right:0px;">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <h3>잘못된 의료 정보들</h3>
+              <div class="col-sm-12 col-md-12" style = "margin:0; padding:0;">
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-content" style="padding:0; margin-right:0px;">
+                  <div class="col-sm-12 col-xs-12 content">
+                    <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+                      <p style="font-size:16px; font-family: 'NotoSans-Bold'; margin-bottom: 0px;">Short Title</p>
+                      <p style="word-break: break-all; font-size:12px; color:#ddd; margin-top:0px;  ">http://blog.naver.com/123445</p>
+                      <p style="font-size:14px; margin-top:20px; height: 70px;" >이 약을 먹으면 모든 병이 말끔히 낫습니다. 예방접종을 하지 않아도 면역력이 높아지는 명약...</p>
+                      <a class="tag">#안과</a>
+                      <a class="tag">#라식</a>
+                    </div>
+
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">전문가</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 2</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 10</a>
+
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px;">일반인</p>
+                      <a class="like"><img src="./images/thumbsup.svg" style="width:16px; margin-right:5px;"/> 5</a>
+                      <a class="like"><img src="./images/thumbsdown.svg" style="width:16px; margin-right:5px; margin-left:10px;"/> 5</a>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+                
+          </div>
+        </div>
+
+        <div class="footer" style="background-color:#eee; padding: 50px; text-align:center; background-color:#dfdfdf;">
+          <p style="color:#78777;">TREND X MEDICAL HACK 2016<br>COPYRIGHT© 2016 TEAM LACIDEM</p>
+          <p style="color:#aeaeae; margin-top:20px;">김태우 윤도일 전민영 김명찬 오성민 이주원</p>
+          
+        </div>
+        
+        
+        <div class="modal fade " id="loginModal" tabindex="-1" role="dialog" >
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content"  style="border-radius:0px; text-align:center;">
+              <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p style="font-family='NotoSans-DemiLight'; color:#bbb; margin-top:15px;">LOGIN</p>
+                
+                <input type="text" class="form-control" style="background-color:#ddd; border-radius:0px; margin-top:20px;" placeholder="Username">
+                
+                <input type="password" class="form-control" style="background-color:#ddd; border-radius:0px; margin-top:15px;" placeholder="Password">
+                
+                <button type="button" class="btn btn-primary" style="background-color:#70B2FF; border-radius:0px; border: none; margin-top:20px;  margin-bottom:10px;">로그인</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <script>
+     
+          $("#search_btn").on("click", function(){
+            var url = $("#search_input").val();
+
+            $.ajax({
+            // type을 설정합니다.
+            type : 'POST',
+            url : "http://40.74.136.158:3000/show/get_id",
+            // 사용자가 입력하여 id로 넘어온 값을 서버로 보냅니다.
+            data : {"url" : url},
+            // 성공적으로 값을 서버로 보냈을 경우 처리하는 코드입니다.
+            success : function (data) {
+             
+                // 서버에서 Return된 값으로 중복 여부를 사용자에게 알려줍니다.
+
+                  location.href= "/result.html?id=" + data["_id"]; 
+                         
+            }
+           });
+  
+          });
+          
+          
+          $("#search_text").on("click", function(){
+            $("#search_input").toggle();
+            $("#text_box").toggle();
+            
+          });
+          
+         
+          
+        </script>
+    </body>

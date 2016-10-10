@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="./js/tmpl.js"></script>
+        <style>
+            *{
+                color:#666666;
+            }
+            hr{
+                width: 100%;
+            }
+            hr#shorter{
+                width:100%;
+            }
+            #text {
+                background-color: #F1F1F1;
+                padding-top: 30px;
+                padding-left: 50px;
+                padding-right:40px;
+            }
+            #comments{
+                padding-top: 20px;
+            }
+            .comment{
+                padding-right: 0px;
+                
+            }
+            h4.relative{
+                position: relative;
+                top: 10px;
+                left: 20px;
+            }
+            #thumbs{
+                padding-down:10px;
+            }
+            .inli{
+                display:inline;
+            }
+            p.qual{
+                position: relative;
+                left: 15px;
+            }
+            textarea#x{
+                width: 250px;
+                height:70px;
+                background-color:#f1f1f1;
+                display: inline;
+                padding:5px;
+            }
+            input[type="text"]#x{
+                width: 330px;
+                height: 40px;
+                border-radius: 0;
+                color:#F1F1F1; 
+                background-color: #F1F1F1;
+            }
+            .button {
+                background-color: #70B2FF;
+                border: none;
+                color: white;
+                padding: 24px 24px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+            }
+            ul{
+                list-style: none;
+            }
+            .container2{
+                width: 100%;
+            }
+            .container, body {
+                
+                margin:0;
+                padding:0;
+            }
+        </style>
+        <script>
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+            
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+            
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : sParameterName[1];
+                    }
+                }
+            };
+        </script>
+    </head>
+    <body>
+        
+        <div class="container" style="background-color:#f1f1f1;">
+    
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-lg-8 col-sm-8 col-md-8" id="text">
+                    <div>
+                    <img src="Group.svg" style="length:100px; align="right" width:100px;">
+                    <span><a style="float:right; color:#b2b2b2">원본보기</a></span>
+                    </div>
+                    
+                    <hr style="border-color:#cbcbcb">
+                    <p align="right">내용 기반 신뢰도 자동 분석 결과: <span style="font-size:18px; color:rgb(235, 86, 65);"id="alpha">0</span></p>
+                    
+                    <div class="col-sm-12 col-md-12 " style="padding:20px;">
+                    <h3 id="title"></h3>
+                    <p id="url"></p>
+                    <p id="content" style="margin-top:20px;"></p>
+                </div>
+                    
+                </div>
+       
+                
+                <div class="col-lg-4 col-md-4 col-sm-4" id="comments" style="padding-top:10px; background-color:#ffffff">
+                    <div class="container2" style="margin-bottom:30px">
+                        <img src="doctor.svg" width="20px" height="20px">
+                        <a style="color:#000000">김삼성 님</a>
+                        <a>|</a>
+                        <a style="color:#000000">Log Out</a>
+                    </div>
+                    <form class="form-inline" id="comment_form">
+                        
+                    <input type="hidden" name="page_id" id="page_id">
+                    <input type="hidden" name="user_id" value="6">
+                    <div class="container2" style="width=100%; padding-bottom:10px; padding-left:0; padding-top:10px">
+                        <div class="container2" style="padding-top:20px">
+                            <h4><strong>내 의견</strong></h4>
+                        </div>
+                        
+                        <div class="container2" id="thumbs">
+                            <input type="radio" name="user_rating" value="1" checked>
+                            <img class="inli up" src="thumbsup.svg">
+                            <p class="inli">믿을만해요</p>
+                            
+                            <input type="radio" name="user_rating" value="0" style="margin-left:15px;">
+                            <img class="inli down" src="thumbsdown.svg">
+                            <p class="inli down">위험해요</p>
+                            <a class="align-right"><img align="right" src="share.svg"></a>
+                            
+                    </div>
+                    
+                    <br>
+                    
+                    <div class="container2">
+                    
+                        <div class="form-group" style="width:100%">
+                            <textarea id="x" style="width:72%; border-radius:0px;" class="form-control" rows="3" placeholder="입력하세요" name="user_comment"></textarea>
+                            <a class="button" id="submit">완료</a>
+                        </div>
+                    
+                    </div>
+                    </form> 
+                    <hr id="shorter">
+                    </div>
+                    <div id="expert_comment" class="container2" style="padding-left:0; padding-bottom:30px">
+                        <h4 class="relative"><strong>전문가 의견</strong></h4>
+                        <div class="container2" style="padding-top:20px;">
+                            <div style="width:100%; margin-bottom: 20px;">
+                                <div style="height:5px;background:#EB5641; float:left;" class="expert_good"></div>
+                                <div style="height:5px; background:#70B2FF; float:left;" class="expert_bad"></div>
+                            </div>
+                            <div style="width:100%; margin-bottom: 40px;">
+                                <div style="float:left;height:20px;" class="expert_good"><p><img class="inli" src="thumbsup.svg"> 믿을만해요 <span id="expert_good"></span></p></div>
+                                <div style="float:left;height:20px;" class="expert_bad"><p><img class="inli" src="thumbsdown.svg"> 의심스러워요 <span id="expert_bad"></span></p></div>
+                            </div>
+                        </div>
+                        <br>
+
+                    </div>
+                    <div id="user_comment" class="container2" style="padding-left:0">
+                        <h4 class="relative"><strong>일반인 의견</strong></h4>
+                       <div class="container2" style="padding-top:20px;">
+                            <div style="width:100%; margin-bottom: 20px;">
+                                <div style="height:5px;background:#EB5641; float:left;" class="normal_good"></div>
+                                <div style="height:5px; background:#70B2FF; float:left;" class="normal_bad"></div>
+                            </div>
+                            
+                            <div style="width:100%; margin-bottom: 40px;">
+                                <div style="float:left;height:20px;" class="expert_good"><p><img class="inli" src="thumbsup.svg"> 믿을만해요 <span id="normal_good"></span></p></div>
+                                <div style="float:left;height:20px;" class="expert_bad"><p><img class="inli" src="thumbsdown.svg"> 의심스러워요 <span id="normal_bad"></span></p></div>
+                            </div>
+                        </div>
+                        
+                        <br>
+                        
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+        </div>
+        <div class="footer" style="background-color:#eee; padding: 50px; text-align:center; background-color:#dfdfdf;">
+              <p style="color:#78777;">TREND X MEDICAL HACK 2016<br>COPYRIGHT© 2016 TEAM LACIDEM</p>
+              <p style="color:#aeaeae; margin-top:20px;">김태우 윤도일 전민영 김명찬 오성민 이주원</p> 
+            </div>
+        <script>
+            var id = getUrlParameter('id');
+            
+            $("#submit").on("click", function(){
+                var formData = $("#comment_form").serialize();
+                $.ajax({
+	 					type : "POST",
+	 					url : "http://40.74.136.158:3000/add/comment",
+	 					cache : false,
+	 					data : formData,
+	 					success : function(data){
+	 					    
+	 					   alert("등록이 완료되었습니다.");
+	 					   location.reload();
+	 					    
+	 					}
+			});
+                
+                
+            });
+            $(document).ready(function(){
+                
+                $("#page_id").val(id);
+                
+                $.ajax({
+                // type을 설정합니다.
+                type : 'GET',
+                url : "http://40.74.136.158:3000/show/get_rating_com/" + id,
+                // 사용자가 입력하여 id로 넘어온 값을 서버로 보냅니다.
+              
+                // 성공적으로 값을 서버로 보냈을 경우 처리하는 코드입니다.
+                success : function (data) {
+                 
+                    $("#alpha").html(data[0]["score"] + "%");
+                 
+                }
+               });
+               
+                
+                
+                $.ajax({
+                // type을 설정합니다.
+                type : 'GET',
+                url : "http://40.74.136.158:3000/show/get_article/" + id,
+                // 사용자가 입력하여 id로 넘어온 값을 서버로 보냅니다.
+              
+                // 성공적으로 값을 서버로 보냈을 경우 처리하는 코드입니다.
+                success : function (data) {
+                 
+                    // 서버에서 Return된 값으로 중복 여부를 사용자에게 알려줍니다.
+                    $("#title").html(data["title"]);
+                    $("#url").html(decodeURIComponent(data["url"]));
+                    $("#content").html(data["content"]);
+                           
+                }
+               });
+               
+               $.ajax({
+                   type : 'GET',
+                url : "http://40.74.136.158:3000/show/get_rating/" + id,
+                // 사용자가 입력하여 id로 넘어온 값을 서버로 보냅니다.
+              
+                // 성공적으로 값을 서버로 보냈을 경우 처리하는 코드입니다.
+                success : function (data) {
+                    var expert = data["expert"];
+                    var normal = data["public_user"]
+                    // 서버에서 Return된 값으로 중복 여부를 사용자에게 알려줍니다.
+                    var good_rate = parseFloat(expert["avg"])*100;
+                    var expert_rate = parseFloat(expert["avg"])*100;
+                    
+                    
+                    $(".expert_good").css("width", String(good_rate) + "%");
+                    $(".expert_bad").css("width", String(100 - good_rate) + "%");
+                    
+                    var normal_rate = parseFloat(normal["avg"])*100;
+                    var normal_rate = parseFloat(normal["avg"])*100;
+                    $(".normal_good").css("width", String(normal_rate) + "%");
+                    $(".normal_bad").css("width", String(100 - normal_rate) + "%");
+                    
+                    $("#expert_good").html(expert["good"]);
+                    $("#expert_bad").html(expert["bad"]);
+                     $("#normal_good").html(normal["good"]);
+                    $("#normal_bad").html(normal["bad"]);
+                }
+               });
+               
+              $.ajax({
+                   type : 'GET',
+                url : "http://40.74.136.158:3000/show/get_comments/doctor/" + id,
+                // 사용자가 입력하여 id로 넘어온 값을 서버로 보냅니다.
+                // 성공적으로 값을 서버로 보냈을 경우 처리하는 코드입니다.
+                success : function (data) {
+                    
+                    for ( i = 0; i < data.length; i++){
+                         console.log(data[i]);
+                        
+                            var tmpl_data = { 
+                                "id": data[i]["email"],
+                                "sub": data[i]["sub_special"],
+                                "comment": data[i]["content"]
+                            };
+                             console.log(data[i]);
+                        
+                            $("#expert_comment").append(tmpl("tmpl-expert", tmpl_data));
+                        
+                        
+                    }
+                
+                }
+                   
+               });
+               
+                $.ajax({
+                   type : 'GET',
+                    url : "http://40.74.136.158:3000/show/get_comments/user/" + id,
+                    // 사용자가 입력하여 id로 넘어온 값을 서버로 보냅니다.
+                    // 성공적으로 값을 서버로 보냈을 경우 처리하는 코드입니다.
+                    success : function (data) {
+                        
+                        for ( i = 0; i < data.length; i++){
+                             console.log(data[i]);
+                           
+                                console.log(data[i]);
+                                var tmpl_data = {
+                                    "id": data[i]["email"],
+                                    "comment": data[i]["content"]
+                                };
+                                
+                                $("#user_comment").append(tmpl("tmpl-user", tmpl_data));
+                            
+                            
+                        }
+                    
+                    }
+                   
+               });
+               
+               
+        });
+        
+        
+        </script>
+        
+        <script type="text/x-tmpl" id="tmpl-expert">
+                        <div class="container2 comment"> 
+                            <img class="inli" src="doctor.svg">
+                            <h4 class="inli">{%=o.id%}</h4>
+                            <p class="inli qual"> {%=o.sub%}</p>
+                            <img class="inli" style="position:relative; left:20px;" src="badge.svg">
+                            <img class="inli" style="position:relative; left:20px;" src="badge.svg">
+                            <img class="inli" style="position:relative; left:20px;" src="badge.svg">
+                            <br><br>
+                            <p style="border-bottom:0;">{%=o.comment%}</p>
+                        </div>
+        </script>
+
+
+
+             <script type="text/x-tmpl" id="tmpl-user">
+                        <div class="container2 comment" > 
+                            <h4>{%=o.id%}</h4>
+                            <p>{%=o.comment%}</p>
+                        </div>
+            </script>
+                        
+        
+    </body>
+</html>
