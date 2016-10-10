@@ -247,7 +247,7 @@ def score_word(lst):
 
     if not lst:
         return 0;
-    lst = filter(lambda x: (len(x) >= 2) or (x in neg_words or x in pos_words), lst)
+    lst = filter(lambda x: (len(x) >= 2) or (x is '암'), lst)
     dic = dict(Counter(lst))
     neg_words = map(lambda x: u''+x, neg_words)
     neg_cnt = 0
@@ -310,7 +310,7 @@ if __name__=='__main__':
     while(True):
         main()
         print 'done'
-        sleep(60*200)
+        sleep(60*20)
     # for filename in listdir('./pickles'):
         # if '.pkl' in filename:
             # with open('./pickles/'+filename, 'r') as f:
