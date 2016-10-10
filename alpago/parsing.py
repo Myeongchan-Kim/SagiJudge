@@ -246,13 +246,13 @@ def score_word(lst):
     lst = filter(lambda x: len(x) >= 2, lst)
     dic = dict(Counter(lst))
     neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대',
-                 '꼭', '완전히', '안돼', '완전', '최고']
+                 '꼭', '완전히', '안돼', '완전', '최고', '반드시']
     neg_words = map(lambda x: u''+x, neg_words)
     neg_cnt = 0
     for word in neg_words:
         if word in dic:
             neg_cnt += dic[word]
-    pos_words = ['질환', '효과', '비교적', '안전', '낫다', '조직', '다소']
+    pos_words = ['질환', '효과', '비교적', '안전', '낫다', '조직', '다소', '출처']
     pos_words = map(lambda x: u''+x, pos_words)
     pos_cnt = 0
     for word in pos_words:
@@ -317,5 +317,3 @@ if __name__=='__main__':
                 # page_id = filename.split('.')[0].split('_')[1]
                 # save_rate(page_id, obj)
                 # save_tags(page_id, getCount(obj))
-
-
