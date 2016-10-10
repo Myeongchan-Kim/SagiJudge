@@ -246,7 +246,7 @@ def score_word(lst):
     lst = filter(lambda x: len(x) >= 2, lst)
     dic = dict(Counter(lst))
     neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대',
-                 '꼭', '완전히', '안돼', '완전', '최고', '반드시']
+                 '꼭', '완전히', '안돼', '완전', '최고', '반드시', '암', '정화']
     neg_words = map(lambda x: u''+x, neg_words)
     neg_cnt = 0
     for word in neg_words:
