@@ -247,7 +247,7 @@ def score_word(lst):
 
     if not lst:
         return 0;
-    lst = filter(lambda x: len(x) >= 2 , lst)
+    lst = filter(lambda x: len(x) >= 1 , lst)
     dic = dict(Counter(lst))
     neg_words = map(lambda x: u''+x, neg_words)
     neg_cnt = 0
