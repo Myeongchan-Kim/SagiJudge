@@ -310,7 +310,7 @@ if __name__=='__main__':
     while(True):
         main()
         print 'done'
-        sleep(60*20)
+        sleep(60*200)
     # for filename in listdir('./pickles'):
         # if '.pkl' in filename:
             # with open('./pickles/'+filename, 'r') as f:
