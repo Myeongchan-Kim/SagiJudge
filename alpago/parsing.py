@@ -241,18 +241,19 @@ def score_eomi(lst):
     return sigmoid(eomi_da - eomi_yo)
 
 def score_word(lst):
+    neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대',
+             '꼭', '완전히', '안돼', '완전', '최고', '반드시', '암', '정화']
+    pos_words = ['비교적', '안전', '낫다', '조직', '다소', '출처', '비판']
+
     if not lst:
         return 0;
-    lst = filter(lambda x: len(x) >= 1, lst)
+    lst = filter(lambda x: (len(x) >= 2) || (x in neg_words || x in pos_words), lst)
     dic = dict(Counter(lst))
-    neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대',
-                 '꼭', '완전히', '안돼', '완전', '최고', '반드시', '암', '정화']
     neg_words = map(lambda x: u''+x, neg_words)
     neg_cnt = 0
     for word in neg_words:
         if word in dic:
             neg_cnt += dic[word]
-    pos_words = ['비교적', '안전', '낫다', '조직', '다소', '출처', '비판']
     pos_words = map(lambda x: u''+x, pos_words)
     pos_cnt = 0
     for word in pos_words:
