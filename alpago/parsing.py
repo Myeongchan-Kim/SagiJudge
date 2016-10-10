@@ -7,6 +7,7 @@ from threading import Thread
 from more_itertools import unique_everseen
 from collections import defaultdict, Counter
 from os import listdir
+from time import sleep
 import cPickle as pickle
 import operator
 import jpype
@@ -173,7 +174,7 @@ def concate_tuple(t):
     return '%s_%s' % t
 
 
-def analize_text(page_id, text):
+def getMorphs(text):
     lines = convert_text_to_lines(text)
     sentences = do_sentencing_without_threading(lines)
     morphs_list = do_parsing_without_threading(sentences)
@@ -181,10 +182,14 @@ def analize_text(page_id, text):
     for morphs in morphs_list:
         for morph in morphs:
             s.setdefault(morph[1], []).append(morph[0])
+    return dict(s)
+
+def analize_text(page_id, text):
+    s = getMorphs(text)
     # with open('./pickles/dump_%d.pkl'%(post_id), 'w') as f:
         # morphs = pickle.dump(dict(s), f);
-    save_tags(page_id, getCount(dict(s)))
-    save_rate(page_id, dict(s))
+    save_tags(page_id, getCount(s))
+    save_rate(page_id, s)
     return True
 
 
@@ -212,7 +217,6 @@ def save_tags(page_id, lst):
             break
     db = connect_db()
     cur = db.cursor()
-    print words
     cur.executemany('insert ignore into tags (page_id, tag) values(%s, %s)',
                     map(lambda x: (page_id, x), words));
     db.commit()
@@ -248,12 +252,13 @@ def score_word(lst):
     for word in neg_words:
         if word in dic:
             neg_cnt += dic[word]
-    pos_words = ['질환', '효과', '비교적', '안전', '낫다', '조직']
+    pos_words = ['질환', '효과', '비교적', '안전', '낫다', '조직', '다소']
     pos_words = map(lambda x: u''+x, pos_words)
     pos_cnt = 0
     for word in pos_words:
         if word in dic:
             pos_cnt += dic[word]
+    print "pos_cnt: %d\t neg_cnt: %d\n" %(pos_cnt, neg_cnt)
     return sigmoid(pos_cnt - neg_cnt)
 
 def get_rate(dic):
@@ -262,10 +267,11 @@ def get_rate(dic):
     val_eomi = 0
     for key, val in dic.iteritems():
         lst.extend(val)
-        val_word = score_word(lst)
-    if 'Eomi' in dic:
-        val_eomi = score_eomi(dic['Eomi'])
-    return (val_word + val_eomi)/2
+    val_word = score_word(lst)
+    # if 'Eomi' in dic:
+        # val_eomi = score_eomi(dic['Eomi'])
+    # return (val_word + v3al_eomi)/2
+    return val_word
 
 def save_rate(page_id, dic):
     rate = 100*get_rate(dic)
@@ -278,21 +284,32 @@ def save_rate(page_id, dic):
         db.close()
     return True
 
+def getById(id):
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('select _id, content from pages where _id = %s', (str(id),))
+    return cur.fetchall()[0][1]
+
 
 def main():
     db = connect_db()
     cur = db.cursor()
     cur.execute('CALL getNewPages()')
     for row in cur.fetchall():
-        post_id = row[0]
+        page_id = row[0]
         content = row[1]
-        if not content: continue
-        analize_text(post_id, content)
+        print page_id
+        if not content.strip(): continue
+        print "Pageid(%d) started" % page_id
+        analize_text(page_id, content)
     # db.close()
 
 
 if __name__=='__main__':
-    main()
+    while(True):
+        main()
+        print 'done'
+        sleep(60*20)
     # for filename in listdir('./pickles'):
         # if '.pkl' in filename:
             # with open('./pickles/'+filename, 'r') as f:
