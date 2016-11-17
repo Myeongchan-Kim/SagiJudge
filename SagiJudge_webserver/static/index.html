@@ -562,7 +562,7 @@
             $.ajax({
             // type을 설정합니다.
             type : 'POST',
-            url : "http://40.74.136.158:3000/show/get_id",
+            url : "http://52.78.21.139:3001/show/get_id",
             // 사용자가 입력하여 id로 넘어온 값을 서버로 보냅니다.
             data : {"url" : url},
             // 성공적으로 값을 서버로 보냈을 경우 처리하는 코드입니다.
@@ -570,7 +570,7 @@
 
                 // 서버에서 Return된 값으로 중복 여부를 사용자에게 알려줍니다.
 
-                  location.href= "result.html?id=" + data["_id"]; 
+                  location.href= "result.html?id=" + data["_id"];
 
             }
            });

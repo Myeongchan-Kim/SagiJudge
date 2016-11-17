@@ -19,7 +19,7 @@ app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 
 
 app.get('/', function(req, res){
