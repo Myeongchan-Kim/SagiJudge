@@ -4,7 +4,13 @@
 # Requirement
 Python
 MySQL
-python-mysqlclient
+
+## Python Packages
+mysqlclient
+flask
+
+# Before to start
+Make `database_info.py`
 
 # Adress  
 127.0.0.1
