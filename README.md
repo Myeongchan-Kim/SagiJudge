@@ -2,7 +2,7 @@
 사기꾼판별기
 
 # Adress  
-http://52.78.21.139:3001/
+127.0.0.1
 
 # API LIST
 ## url -> ID call
