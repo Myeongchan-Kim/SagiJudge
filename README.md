@@ -10,7 +10,21 @@ mysqlclient
 flask
 
 # Before to start
-Make `database_info.py`
+  - Create a database as 'databasename'
+`CREATE DATABASE {database_name};`
+  - Create api user of MySQL and grant propery
+`CREATE USER {user}@{host} IDENTIFIED BY {passwd};`
+`GRANT ALL ON {database_name}.* TO {user}@{host};`
+  - Make `database_info.py` for MySQL connection.
+```python
+def mysql_info():
+    return { 
+        'host' : {host},
+        'passwd' : {passwd},
+        'user' : {user},
+        'db' : {database_nmae},
+    }
+```
 
 # Adress  
 127.0.0.1
