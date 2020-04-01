@@ -1,6 +1,11 @@
 # SagiJudge
 사기꾼판별기
 
+# Requirement
+Python
+MySQL
+python-mysqlclient
+
 # Adress  
 127.0.0.1
 
