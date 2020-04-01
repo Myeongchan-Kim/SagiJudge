@@ -19,9 +19,9 @@ def init_db(sql):
                 break
             query += query_line
             if ';' in query:
-                print query
+                print(query)
                 cursor.execute(query)
-                print 'SUCCESS'
+                print('SUCCESS')
                 query = ''
     db.commit()
     db.close()
@@ -53,9 +53,9 @@ def create_proc():
             if not query_line:
                 break;
             if '--' in query_line:
-                print query
+                print(query)
                 cursor.execute(query)
-                print 'SUCCESS'
+                print('SUCCESS')
                 query = ''
             else:
                 query += query_line
@@ -74,15 +74,15 @@ def genDummy():
     db.close()
 
 def main():
-    print "initilizing tables..."
+    print("initilizing tables...")
     # init_db('./schema.sql')
     # init_db('./dummy.sql')
-    print "DONE"
-    print "creating procedures..."
+    print("DONE")
+    print("creating procedures...")
     create_proc()
-    print "DONE"
+    print("DONE")
     # genDummy()
-    print "dummyGen"
+    print("dummyGen")
 
 
 if __name__ == '__main__':

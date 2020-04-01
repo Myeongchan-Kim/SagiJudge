@@ -8,14 +8,15 @@ from more_itertools import unique_everseen
 from collections import defaultdict, Counter
 from os import listdir
 from time import sleep
-import cPickle as pickle
+import pickle as pickle
 import operator
 import jpype
 import multiprocessing
 import psutil
 import sys
 import math
-reload(sys)
+import importlib
+importlib.reload(sys)
 sys.setdefaultencoding('utf-8')
 import imp
 database_info = imp.load_source('database_info', '../database_info.py');
@@ -39,7 +40,7 @@ def convert_text_to_lines(text):
     lines = text.split('\n')
     ret = []
     for line in lines:
-        line = u'%s' % line
+        line = '%s' % line
         if line.strip() == '': continue
         ret.append(line)
     del lines
@@ -65,7 +66,7 @@ def do_sentencing_by_threading(lines):
 
 def do_sentencing_except_consonants(line):
     def is_consonant(c):
-        return u'\u3130' < c < u'\u3164'
+        return '\u3130' < c < '\u3164'
     start_consonant = []
     end_consonant = []
     for i in range(len(line)):
@@ -80,7 +81,7 @@ def do_sentencing_except_consonants(line):
         else:
             if i != 0 and is_consonant(line[i-1]):
                 end_consonant.append(i)
-    consonant_cluster_index = zip(start_consonant, end_consonant)
+    consonant_cluster_index = list(zip(start_consonant, end_consonant))
     sentences = []
 
     if not consonant_cluster_index:
@@ -116,14 +117,14 @@ def do_sentencing_line(line):
     for i in range(len(splited)):
         chunk = splited[i]
         if len(chunk) > 20:
-            print 'too long ', line
+            print('too long ', line)
             return [line]
 
     sentences = []
     try:
         sentences.extend(kkma.sentences(line))
     except:
-        print 'error ', line
+        print('error ', line)
         sentences.extend([line])
 
     sentences[-1] += r_remainder
@@ -195,11 +196,11 @@ def analize_text(page_id, text):
 
 def getCount(dic):
     cnt = {}
-    for key, val in dic.iteritems():
+    for key, val in dic.items():
         if key == 'Noun':
             cnt = Counter(val)
     cnt = dict(cnt)
-    sorted_cnt = sorted(cnt.items(), key=operator.itemgetter(1), reverse=True)
+    sorted_cnt = sorted(list(cnt.items()), key=operator.itemgetter(1), reverse=True)
     return sorted_cnt
 
 
@@ -218,7 +219,7 @@ def save_tags(page_id, lst):
     db = connect_db()
     cur = db.cursor()
     cur.executemany('insert ignore into tags (page_id, tag) values(%s, %s)',
-                    map(lambda x: (page_id, x), words));
+                    [(page_id, x) for x in words]);
     db.commit()
     db.close()
     return True
@@ -233,11 +234,11 @@ def score_eomi(lst):
     eomi_total = len(lst)
     eomi_cnt = dict(Counter(lst))
     eomi_yo = 0
-    if u'요' in eomi_cnt:
-        eomi_yo += eomi_cnt[u'요']
+    if '요' in eomi_cnt:
+        eomi_yo += eomi_cnt['요']
     eomi_da = 0
-    if u'다' in eomi_cnt:
-        eomi_da += eomi_cnt[u'다']
+    if '다' in eomi_cnt:
+        eomi_da += eomi_cnt['다']
     return sigmoid(eomi_da - eomi_yo)
 
 def score_word(lst):
@@ -247,26 +248,26 @@ def score_word(lst):
 
     if not lst:
         return 0;
-    lst = filter(lambda x: len(x) >= 1 , lst)
+    lst = [x for x in lst if len(x) >= 1]
     dic = dict(Counter(lst))
-    neg_words = map(lambda x: u''+x, neg_words)
+    neg_words = [''+x for x in neg_words]
     neg_cnt = 0
     for word in neg_words:
         if word in dic:
             neg_cnt += dic[word]
-    pos_words = map(lambda x: u''+x, pos_words)
+    pos_words = [''+x for x in pos_words]
     pos_cnt = 0
     for word in pos_words:
         if word in dic:
             pos_cnt += dic[word]
-    print "pos_cnt: %d\t neg_cnt: %d\n" %(pos_cnt, neg_cnt)
+    print("pos_cnt: %d\t neg_cnt: %d\n" %(pos_cnt, neg_cnt))
     return sigmoid(pos_cnt - neg_cnt)
 
 def get_rate(dic):
     lst = []
     val_word = 0
     val_eomi = 0
-    for key, val in dic.iteritems():
+    for key, val in dic.items():
         lst.extend(val)
     val_word = score_word(lst)
     # if 'Eomi' in dic:
@@ -299,9 +300,9 @@ def main():
     for row in cur.fetchall():
         page_id = row[0]
         content = row[1]
-        print page_id
+        print(page_id)
         if not content.strip(): continue
-        print "Pageid(%d) started" % page_id
+        print("Pageid(%d) started" % page_id)
         analize_text(page_id, content)
     # db.close()
 
@@ -309,7 +310,7 @@ def main():
 if __name__=='__main__':
     while(True):
         main()
-        print 'done'
+        print('done')
         sleep(60*20)
     # for filename in listdir('./pickles'):
         # if '.pkl' in filename:
