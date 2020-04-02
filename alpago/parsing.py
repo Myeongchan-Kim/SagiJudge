@@ -15,20 +15,20 @@ import multiprocessing
 import psutil
 import sys
 import math
-import importlib
-importlib.reload(sys)
-sys.setdefaultencoding('utf-8')
-import imp
-database_info = imp.load_source('database_info', '../database_info.py');
+from importlib.machinery import SourceFileLoader
+database_info = SourceFileLoader('database_info', '../database_info.py').load_module()
 mysql_info = database_info.mysql_info
 
-
+print("Import completed.")
 kkma = Kkma()
+
+print("Import twitter")
 twitter = Twitter()
 
 result_sentencing_thread = []
 result_parsing_thread = []
 
+print("Intializing...")
 
 def connect_db():
     db = mdb.connect(**mysql_info())
@@ -242,8 +242,7 @@ def score_eomi(lst):
     return sigmoid(eomi_da - eomi_yo)
 
 def score_word(lst):
-    neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대',
-             '꼭', '완전히', '안돼', '완전', '최고', '반드시', '암', '정화']
+    neg_words = ['만병', '통치', '근원', '모든', '전부', '무조건', '절대', '꼭', '완전히', '안돼', '완전', '최고', '반드시', '암', '정화']
     pos_words = ['비교적', '안전', '낫다', '조직', '다소', '출처', '비판']
 
     if not lst:
@@ -308,10 +307,11 @@ def main():
 
 
 if __name__=='__main__':
+    print("Start Alphgo module...")
     while(True):
         main()
         print('done')
-        sleep(60*20)
+        sleep(1)
     # for filename in listdir('./pickles'):
         # if '.pkl' in filename:
             # with open('./pickles/'+filename, 'r') as f:
