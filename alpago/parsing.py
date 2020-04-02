@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import MySQLdb as mdb
-from konlpy.tag import Twitter
+from konlpy.tag import Okt
 from konlpy.tag import Kkma
 from konlpy.utils import pprint
 from threading import Thread
@@ -19,16 +19,11 @@ from importlib.machinery import SourceFileLoader
 database_info = SourceFileLoader('database_info', '../database_info.py').load_module()
 mysql_info = database_info.mysql_info
 
-print("Import completed.")
-kkma = Kkma()
-
-print("Import twitter")
-twitter = Twitter()
+sentence_parser = Kkma()
+morph_parser = Okt()
 
 result_sentencing_thread = []
 result_parsing_thread = []
-
-print("Intializing...")
 
 def connect_db():
     db = mdb.connect(**mysql_info())
@@ -49,7 +44,7 @@ def convert_text_to_lines(text):
 
 def do_sentencing(start, end, lines, result_sentencing_thread):
     jpype.attachThreadToJVM()
-    sentences = [kkma.sentences(lines[i]) for i in range(start, end)]
+    sentences = [sentence_parser.sentences(lines[i]) for i in range(start, end)]
     result_sentencing_thread.append(sentences)
     return
 
@@ -122,7 +117,7 @@ def do_sentencing_line(line):
 
     sentences = []
     try:
-        sentences.extend(kkma.sentences(line))
+        sentences.extend(sentence_parser.sentences(line))
     except:
         print('error ', line)
         sentences.extend([line])
@@ -144,27 +139,17 @@ def do_sentencing_without_threading(lines):
 
 def do_parsing(start, end, sentences, result_parsing_thread):
     # jpype.attachThreadToJVM()
-    morphs = [twitter.pos(sentences[i]) for i in range(start, end)]
+    morphs = [morph_parser.pos(sentences[i]) for i in range(start, end)]
     result_parsing_thread.append(morphs)
     return
 
 
-def do_parsing_by_threading(sentences):
-    nsentences = len(sentences)
-    t1 = Thread(target=do_parsing, args=(0, int(nsentences/2), sentences, result_parsing_thread))
-    t2 = Thread(target=do_parsing, args=(int(nsentences/2), nsentences, sentences, result_parsing_thread))
-    t1.start(); t2.start()
-    t1.join(); t2.join()
-    # jpype.detachThreadFromJVM()
-    return sum(result_parsing_thread, [])
-
-
 def do_parsing_without_threading(sentences):
     if type(sentences) is list:
-        return [twitter.pos(sentence) for sentence in sentences]
+        return [morph_parser.pos(sentence) for sentence in sentences]
     else:
         jpype.attachThreadToJVM()
-        return twitter.pos(sentences)
+        return morph_parser.pos(sentences)
 
 
 def dedup(l):
